@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Edit Content</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-secondary-container": "#54647a",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-low": "#f2f3ff",
+                        "secondary-container": "#d0e1fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface": "#faf8ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eaedff",
+                        "secondary": "#505f76",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffede6",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-highest": "#dae2fd",
+                        "outline-variant": "#c3c6d7",
+                        "on-background": "#131b2e",
+                        "tertiary": "#943700",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dae2fd",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d2d9f4",
+                        "outline": "#737686",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-container-high": "#e2e7ff",
+                        "inverse-surface": "#283044",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-surface": "#131b2e",
+                        "surface-tint": "#0053db",
+                        "background": "#faf8ff",
+                        "on-surface-variant": "#434655",
+                        "tertiary-container": "#bc4800",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004ac6",
+                        "primary-container": "#2563eb",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "40px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "max-width": "1280px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "caption": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "30px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "caption": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        
+        /* Custom scrollbar for editor */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+            border: 2px solid theme('colors.background');
+        }
+        
+        /* Editor base styles */
+        .editor-content:empty:before {
+            content: attr(data-placeholder);
+            color: theme('colors.on-surface-variant');
+            pointer-events: none;
+            display: block; /* For Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col pt-safe pb-safe selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface fixed top-0 w-full z-50 border-b border-outline-variant dark:border-outline pt-safe">
+<div class="flex justify-between items-center px-4 h-16 w-full">
+<button class="text-on-surface-variant dark:text-surface-variant font-body-md text-body-md hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-95 px-3 py-2 rounded-lg">
+                Cancel
+            </button>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-inverse-on-surface text-center flex-1">
+                Edit Content
+            </h1>
+<button class="text-primary dark:text-primary-fixed font-bold font-body-md text-body-md hover:bg-secondary-container dark:hover:bg-on-secondary-fixed-variant transition-colors active:scale-95 px-3 py-2 rounded-lg">
+                Publish
+            </button>
+</div>
+</header>
+<!-- Main Content Area (Editor) -->
+<main class="flex-1 mt-16 mb-14 overflow-y-auto px-margin-mobile py-lg max-w-max-width mx-auto w-full">
+<!-- Document Meta / Context (Bento style card) -->
+<div class="mb-lg bg-surface-container-low rounded-xl border border-outline-variant p-md flex items-start gap-md">
+<div class="bg-cover bg-center w-16 h-16 rounded-lg border border-outline-variant shrink-0" data-alt="A small, stylized digital illustration representing a modern corporate editorial workflow. Soft white light, pristine light-mode aesthetic with indigo accents. A minimalist representation of a document or article header." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCm11Owv5u_oRozWU2zOliufGmLhu1qJarefsj4z1DasOnQmxFk0Bx0luGFfN49gGblFXLBMCgEB2eJ7u4BxGj_iY9zJTzsklRJMg4qz1Sh3Sxp-BCvUWJ3OJKXRk8H-vJHty2_b98bFa15yIv570WZh-O0TrE69j8nnQmKbUnnYr22Q42zNhH1xFVBdkKdt0YZKjAcC0ajCr6HFCys14w8Pg8aXyKUrlSfwD7Wtae-dCAqXj-0CgN_4mGhc3WBt1R7oB6xYe8a6S8')"></div>
+<div class="flex-1">
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider mb-1">Draft • Last saved 2m ago</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">folder</span>
+<span class="font-body-md text-body-md text-secondary">Product Updates</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Title Input -->
+<input class="w-full bg-transparent border-0 border-b border-transparent hover:border-outline-variant focus:border-primary focus:ring-0 px-0 py-sm font-headline-lg-mobile text-headline-lg-mobile text-on-surface placeholder-on-surface-variant transition-colors mb-md" placeholder="Post Title" type="text" value="Q3 Design System Updates"/>
+<!-- Tags / Metadata chips -->
+<div class="flex flex-wrap gap-2 mb-lg">
+<span class="inline-flex items-center gap-1 bg-surface-container px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">sell</span> UI/UX
+            </span>
+<span class="inline-flex items-center gap-1 bg-surface-container px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">sell</span> Release Notes
+            </span>
+<button class="inline-flex items-center justify-center bg-surface px-3 py-1 rounded-full font-label-sm text-label-sm text-primary border border-dashed border-primary hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span> Add Tag
+            </button>
+</div>
+<!-- Rich Text Editor Canvas -->
+<div class="font-body-lg text-body-lg text-on-surface leading-relaxed min-h-[442px] outline-none editor-content" contenteditable="true" data-placeholder="Start writing your story...">
+<p class="mb-4">We are rolling out the newest iteration of our shared components library. This update focuses heavily on increasing contrast ratios across the dashboard and introducing more robust tonal elevation layers.</p>
+<p class="mb-4">Key changes include:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+<li>Deprecation of heavy drop shadows in favor of 1px borders.</li>
+<li>New interactive states for primary buttons.</li>
+</ul>
+</div>
+</main>
+<!-- BottomNavBar (Formatting Toolbar) -->
+<nav class="bg-surface-container dark:bg-surface-container-high fixed bottom-0 w-full z-50 h-14 border-t border-outline-variant dark:border-outline">
+<div class="flex justify-around items-center px-2 pb-safe w-full h-full">
+<button class="flex items-center justify-center text-on-surface-variant dark:text-surface-variant w-12 h-10 hover:bg-secondary-container dark:hover:bg-secondary rounded-full active:scale-90 transition-transform duration-150 group">
+<span class="material-symbols-outlined font-label-sm text-label-sm group-hover:text-on-secondary-container">format_bold</span>
+</button>
+<!-- Active State Example -->
+<button class="flex items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full w-12 h-10 hover:bg-secondary-container dark:hover:bg-secondary active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined font-label-sm text-label-sm">format_italic</span>
+</button>
+<button class="flex items-center justify-center text-on-surface-variant dark:text-surface-variant w-12 h-10 hover:bg-secondary-container dark:hover:bg-secondary rounded-full active:scale-90 transition-transform duration-150 group">
+<span class="material-symbols-outlined font-label-sm text-label-sm group-hover:text-on-secondary-container">format_list_bulleted</span>
+</button>
+<button class="flex items-center justify-center text-on-surface-variant dark:text-surface-variant w-12 h-10 hover:bg-secondary-container dark:hover:bg-secondary rounded-full active:scale-90 transition-transform duration-150 group">
+<span class="material-symbols-outlined font-label-sm text-label-sm group-hover:text-on-secondary-container">link</span>
+</button>
+<!-- Separator -->
+<div class="w-px h-6 bg-outline-variant mx-1"></div>
+<button class="flex items-center justify-center text-on-surface-variant dark:text-surface-variant w-12 h-10 hover:bg-secondary-container dark:hover:bg-secondary rounded-full active:scale-90 transition-transform duration-150 group">
+<span class="material-symbols-outlined font-label-sm text-label-sm group-hover:text-on-secondary-container">settings</span>
+</button>
+</div>
+</nav>
+<script>
+        // Simple script to handle input auto-resize if needed in a real app, 
+        // and to handle basic toolbar toggles for prototype feel.
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if(this.querySelector('.material-symbols-outlined').textContent !== 'settings') {
+                        // Toggle active classes
+                        const isActive = this.classList.contains('bg-primary-container');
+                        
+                        if (isActive) {
+                            this.classList.remove('bg-primary-container', 'dark:bg-primary', 'text-on-primary-container', 'dark:text-on-primary');
+                            this.classList.add('text-on-surface-variant', 'dark:text-surface-variant');
+                        } else {
+                            this.classList.remove('text-on-surface-variant', 'dark:text-surface-variant');
+                            this.classList.add('bg-primary-container', 'dark:bg-primary', 'text-on-primary-container', 'dark:text-on-primary');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>
