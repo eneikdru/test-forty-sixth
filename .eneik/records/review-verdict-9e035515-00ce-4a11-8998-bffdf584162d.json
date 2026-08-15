@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR #0 committed generated image artifacts under .eneik/records/ (.eneik/records/design-check-f40bd34a-d18d-45f5-b5d4-15b8cdfe253f/desktop-1440.png and mobile-375.png), violating repository boundary rules against committing files under .eneik/ and rules against committing binary/generated image artifacts.",
+      "concerns": []
+    }
+  ]
+}
