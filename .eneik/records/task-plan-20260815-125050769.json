@@ -1,0 +1,190 @@
+{
+  "epics": [
+    {
+      "existingEpicId": null,
+      "title": "Horizontal scroll indicators for active modules",
+      "jtbd": "When I browse the interface on a non-touch device, I want to see explicit horizontal scroll indicators, so that I can easily discover off-screen active modules.",
+      "kanoClass": "Performance",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Reduce missed scroll interactions by 100%",
+      "tocConstraintRef": "UI discoverability",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Add explicit horizontal scroll indicators for the active modules list on non-touch devices."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Add horizontal scroll indicators on non-touch devices",
+          "roleTag": "BARCAN-TAG-11",
+          "jtbd": "When implementing scroll indicators for this epic, I want to patch the existing UI component, so that explicit indicators are visible on non-touch devices.",
+          "acceptanceCriteria": "Given a horizontal scroll region for active modules on a non-touch device,\nWhen the user views the region,\nThen explicit scroll indicators must be visible, and automated UI accessibility tests must verify keyboard operability and a 4.5:1 text contrast ratio.",
+          "leanValue": "valuable",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Frontend component styling",
+          "sixSigmaMetric": "100% visibility of scroll indicators on non-touch screens",
+          "hasUi": true,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "9cf7131c-5906-4572-920a-e0efc3e250a4",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Implement automated tests for the authentication logic in AuthController and WebConfig."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Write automated tests for authentication logic",
+          "roleTag": "BARCAN-TAG-06",
+          "jtbd": "When writing tests for this epic, I want to verify AuthController and WebConfig, so that the authentication mechanism is strictly validated against regressions.",
+          "acceptanceCriteria": "Given the existing AuthController and WebConfig logic,\nWhen the test suite runs,\nThen automated tests must execute and successfully verify the authentication and session management behaviors.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Authentication verification pipeline",
+          "sixSigmaMetric": "Increase AuthController test coverage to 100%",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "7400da12-6696-47aa-b94c-401c374028d3",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Implement automated tests for the epidemiological material endpoints and entities."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Write automated tests for material endpoints",
+          "roleTag": "BARCAN-TAG-06",
+          "jtbd": "When writing tests for this epic, I want to verify the material endpoints and entities, so that cataloging operations are mathematically validated.",
+          "acceptanceCriteria": "Given the existing material endpoints and entities,\nWhen the test suite runs,\nThen automated integration tests must execute and successfully verify the CRUD operations for epidemiological materials.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Material API verification",
+          "sixSigmaMetric": "Increase material endpoints test coverage to 100%",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "42f61f7d-c744-4a54-a818-4503b175e2ca",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Remove test pipeline stubbing from the Dockerfile to ensure tests run during the build."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Enforce test execution in Docker pipeline",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When fixing the build script for this epic, I want to remove the skipTests flag, so that the container is only built if the tests genuinely pass.",
+          "acceptanceCriteria": "Given the backend Dockerfile,\nWhen the Docker image is built,\nThen the build process must run all automated tests and fail the build if any test fails.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Docker build verification phase",
+          "sixSigmaMetric": "100% genuine test execution during build",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Automated Code Review Integrity",
+      "jtbd": "When an automated code review is submitted, I want it to contain genuine reasoning, so that faked approvals cannot bypass the review gate.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Decrease faked review approvals to 0%",
+      "tocConstraintRef": "Code review generation pipeline",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Prevent faked code review records by enforcing genuine critique and non-empty reasoning fields."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch code review generation logic to enforce critique",
+          "roleTag": "BARCAN-TAG-02",
+          "jtbd": "When implementing the review validation patch for this epic, I want to reject empty critical reasons, so that only genuine reviews are recorded.",
+          "acceptanceCriteria": "Given the code review generation system,\nWhen an approval review is generated,\nThen the system must require a substantive criticalReason, and automated unit tests must verify that empty or faked reviews are rejected.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Review schema validation",
+          "sixSigmaMetric": "100% rejection rate for empty review reasons",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "42f61f7d-c744-4a54-a818-4503b175e2ca",
+      "sourceIndex": 2,
+      "requirements": [
+        "R1: Fix the code integrity breach by ensuring the Dockerfile executes tests."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Remove test pipeline stubbing from Dockerfile",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When fixing the build script for this epic, I want to remove the skipTests flag, so that the container is only built if the tests genuinely pass.",
+          "acceptanceCriteria": "Given the backend Dockerfile,\nWhen the Docker image is built,\nThen the build process must run all automated tests and fail the build if any test fails.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Docker build verification phase",
+          "sixSigmaMetric": "100% genuine test execution during build",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Automated Code Review Validation",
+      "jtbd": "When an automated code review is submitted, I want it to contain genuine reasoning, so that faked approvals cannot bypass the review gate.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Decrease faked review approvals to 0%",
+      "tocConstraintRef": "Code review generation pipeline",
+      "sourceIndex": 2,
+      "requirements": [
+        "R1: Prevent faked code review records by enforcing genuine critique and non-empty reasoning fields."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch code review generation logic to enforce critique",
+          "roleTag": "BARCAN-TAG-02",
+          "jtbd": "When implementing the review validation patch for this epic, I want to reject empty critical reasons, so that only genuine reviews are recorded.",
+          "acceptanceCriteria": "Given the code review generation system,\nWhen an approval review is generated,\nThen the system must require a substantive criticalReason, and automated unit tests must verify that empty or faked reviews are rejected.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Review schema validation",
+          "sixSigmaMetric": "100% rejection rate for empty review reasons",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    }
+  ]
+}
