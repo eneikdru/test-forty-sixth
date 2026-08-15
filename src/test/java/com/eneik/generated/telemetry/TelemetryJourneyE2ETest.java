@@ -268,7 +268,7 @@ class TelemetryJourneyE2ETest {
 
         JsonNode payloadNode = objectMapper.readTree(event.getPayload());
         assertThat(payloadNode.has("rootCausePatternId")).isTrue();
-        assertThat(payloadNode.get("rootCausePatternId").asText()).isEqualTo("UNCATEGORIZED");
+        assertThat(payloadNode.get("rootCausePatternId").asText()).isEqualTo("SEARCH_ZERO_RESULTS");
     }
 
     @Test
