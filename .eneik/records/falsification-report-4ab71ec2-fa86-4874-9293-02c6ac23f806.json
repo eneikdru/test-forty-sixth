@@ -1,0 +1,28 @@
+{
+  "violations": [
+    {
+      "roleTag": "BARCAN-TAG-07",
+      "type": "refusal_criteria",
+      "prNumber": 50,
+      "reason": "PR #50 adds authentication logic (AuthController, WebConfig) but its diff contains no test files (*Test.java), directly violating the BARCAN-TAG-07 refusal criteria requiring automated verification artifacts."
+    },
+    {
+      "roleTag": "BARCAN-TAG-07",
+      "type": "refusal_criteria",
+      "prNumber": 49,
+      "reason": "PR #49 modifies material endpoints and entities but its diff contains no test files (*Test.java), directly violating the BARCAN-TAG-07 refusal criteria requiring automated verification artifacts."
+    },
+    {
+      "roleTag": "BARCAN-TAG-09",
+      "type": "stub",
+      "prNumber": 45,
+      "reason": "The Dockerfile in PR #45 executes 'mvn clean package -DskipTests', effectively stubbing the test pipeline stage by skipping test execution and faking build success without doing real verification work."
+    },
+    {
+      "roleTag": "BARCAN-TAG-09",
+      "type": "stub",
+      "prNumber": 47,
+      "reason": "The JSON record in PR #47 fakes a code review stage by issuing an 'approve' verdict for PR #0 with an empty 'criticalReason' and no 'concerns', simulating a completed review with no underlying critique or logic."
+    }
+  ]
+}
