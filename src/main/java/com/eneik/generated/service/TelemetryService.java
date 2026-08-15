@@ -106,7 +106,7 @@ public class TelemetryService {
 
             int resultCount = payload.get("resultCount").asInt();
             if (resultCount == 0 && !payload.has("rootCausePatternId")) {
-                ((com.fasterxml.jackson.databind.node.ObjectNode) payload).put("rootCausePatternId", "UNCATEGORIZED");
+                ((com.fasterxml.jackson.databind.node.ObjectNode) payload).put("rootCausePatternId", "SEARCH_ZERO_RESULTS");
             }
         } else if ("PUBLICATION".equals(eventType)) {
             if (!payload.has("materialId") || payload.get("materialId").isNull() || payload.get("materialId").asText().trim().isEmpty()) {
