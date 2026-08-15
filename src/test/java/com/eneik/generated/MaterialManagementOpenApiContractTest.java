@@ -32,7 +32,7 @@ class MaterialManagementOpenApiContractTest {
         int schemaIdx = content.indexOf("CreateMaterialRequest:");
         assertThat(schemaIdx).isGreaterThan(-1);
 
-        int nextSchemaIdx = content.indexOf("UnpublishMaterialRequest:", schemaIdx);
+        int nextSchemaIdx = content.indexOf("PublishMaterialRequest:", schemaIdx);
         String schemaBlock = content.substring(schemaIdx, nextSchemaIdx > -1 ? nextSchemaIdx : content.length());
 
         assertThat(schemaBlock)
@@ -40,6 +40,24 @@ class MaterialManagementOpenApiContractTest {
                 .contains("- title")
                 .contains("- pathogenType")
                 .contains("- content");
+    }
+
+    @Test
+    void testPublishMaterialSpecRequiresStatus() throws IOException {
+        String content = Files.readString(Path.of(CONTRACT_PATH));
+
+        assertThat(content).contains("/api/v1/materials/{id}/publish:");
+        assertThat(content).contains("PublishMaterialRequest:");
+
+        int schemaIdx = content.indexOf("PublishMaterialRequest:");
+        assertThat(schemaIdx).isGreaterThan(-1);
+
+        int nextSchemaIdx = content.indexOf("UnpublishMaterialRequest:", schemaIdx);
+        String schemaBlock = content.substring(schemaIdx, nextSchemaIdx > -1 ? nextSchemaIdx : content.length());
+
+        assertThat(schemaBlock)
+                .as("Publish material request schema must require status field")
+                .contains("- status");
     }
 
     @Test

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Material Management API Contract
-  description: Shared API contract for creating, fetching, searching, and unpublishing epidemiological materials.
+  description: Shared API contract for creating, fetching, searching, publishing, and unpublishing epidemiological materials.
   version: 1.0.0
 paths:
   /api/v1/materials:
@@ -86,6 +86,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /api/v1/materials/{id}/publish:
+    post:
+      summary: Publish epidemiological material
+      description: Publishes an existing material, transitioning its state to PUBLISHED.
+      operationId: publishMaterial
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishMaterialRequest'
+      responses:
+        '200':
+          description: Material successfully published.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialResponse'
+        '400':
+          description: Invalid publish request or missing required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Material not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/materials/{id}/unpublish:
     post:
       summary: Unpublish epidemiological material
@@ -149,6 +186,22 @@ components:
           description: Optional additional metadata in JSON or plain text format.
           example: '{"author": "EpiTeam", "tags": ["influenza", "outbreak"]}'
 
+    PublishMaterialRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - PUBLISHED
+          description: Target status for publishing material. Must be PUBLISHED.
+          example: PUBLISHED
+        comment:
+          type: string
+          description: Optional publish note or changelog comment.
+          example: Approved for public release.
+
     UnpublishMaterialRequest:
       type: object
       required:
@@ -178,7 +231,7 @@ components:
       properties:
         id:
           type: string
-          example: 1
+          example: 123e4567-e89b-12d3-a456-426614174000
         title:
           type: string
           example: Influenza A Outbreak Protocol 2026
