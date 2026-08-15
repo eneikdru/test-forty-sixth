@@ -12,7 +12,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+import com.eneik.generated.Application;
+
+@SpringBootTest(classes = Application.class)
 public class TelemetryEventRepositoryTest {
 
     @Autowired
