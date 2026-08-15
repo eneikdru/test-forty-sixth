@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR #0 commits generated PNG image artifacts under .eneik/records/ (desktop-1440.png and mobile-375.png), violating repository boundary rules against committing files under .eneik/ and rules against committing binary/generated image artifacts.",
+      "concerns": []
+    }
+  ]
+}
