@@ -1,0 +1,12 @@
+{
+  "testsRun": 42,
+  "testsPassed": 42,
+  "testsFailed": 0,
+  "acceptanceCriteriaVerified": [
+    "Given an E2E test, When a full search and view journey is completed, Then the correct metrics are found in the event log.",
+    "Given an E2E test, When a material is published, Then the publication counter increments."
+  ],
+  "coverageDeltaPercent": null,
+  "verdict": "pass",
+  "notes": "Verified full telemetry journey E2E test suite including search/view metrics and publication event counter increments."
+}
