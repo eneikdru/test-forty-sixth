@@ -7,4 +7,9 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     trace: 'off',
   },
+  webServer: {
+    command: 'npm run preview -- --port 5173',
+    port: 5173,
+    reuseExistingServer: true,
+  },
 });
