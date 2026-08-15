@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR commits a file under the reserved .eneik/ path (.eneik/records/qa-verification-f0dfb7e8-ed52-4cde-9026-e32f0611e6f1.json), which is explicitly forbidden by the task boundaries. Furthermore, the PR directly contradicts the stated Acceptance Criteria by implementing Spring Boot MockMvc tests instead of the required E2E tests.",
+      "concerns": []
+    }
+  ]
+}
