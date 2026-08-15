@@ -2,14 +2,44 @@
   let newPassword = '';
   let confirmPassword = '';
   let errorMessage = '';
+  let successMessage = '';
 
-  function handleSubmit(event) {
+  // Get token from URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const token = searchParams.get('token');
+
+  async function handleSubmit(event) {
     event.preventDefault();
     if (newPassword !== confirmPassword) {
       errorMessage = 'Passwords do not match. Please try again.';
-    } else {
-      errorMessage = '';
-      // Proceed with actual reset logic if needed
+      return;
+    }
+
+    if (!token) {
+        errorMessage = 'Invalid or missing recovery token.';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/v1/auth/recovery/confirm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token, newPassword })
+        });
+
+        if (response.ok) {
+            successMessage = 'Password reset successful!';
+            errorMessage = '';
+        } else {
+            const data = await response.json();
+            errorMessage = data.message || 'Recovery token is invalid, expired, or already consumed.';
+            successMessage = '';
+        }
+    } catch (err) {
+        errorMessage = 'An error occurred. Please try again.';
+        successMessage = '';
     }
   }
 </script>
@@ -62,6 +92,12 @@
             <div class="flex items-center gap-1 text-error mt-2 w-full justify-start" role="alert">
               <span class="material-symbols-outlined text-[16px]" data-icon="error">error</span>
               <span class="font-label-sm text-label-sm">{errorMessage}</span>
+            </div>
+          {/if}
+          {#if successMessage}
+            <div class="flex items-center gap-1 text-green-600 mt-2 w-full justify-start" role="status">
+              <span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+              <span class="font-label-sm text-label-sm">{successMessage}</span>
             </div>
           {/if}
         </div>

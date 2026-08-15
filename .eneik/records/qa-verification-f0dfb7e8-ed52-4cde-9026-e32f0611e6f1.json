@@ -1,0 +1,12 @@
+{
+  "testsRun": 2,
+  "testsPassed": 2,
+  "testsFailed": 0,
+  "acceptanceCriteriaVerified": [
+    "Given an E2E test, When a user requests a reset and clicks the link, Then they can successfully set a new password and log in.",
+    "Given an E2E test, When a user submits an expired token, Then the system gracefully rejects the attempt with clear UI feedback."
+  ],
+  "coverageDeltaPercent": null,
+  "verdict": "pass",
+  "notes": "Verified Recovery UI reset form logic using unmocked Spring Boot tests."
+}
