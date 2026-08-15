@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contrast Accessibility Reference</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c4c7ca",
+                        "on-surface-variant": "#414754",
+                        "on-secondary-fixed-variant": "#43474a",
+                        "on-tertiary-fixed-variant": "#783100",
+                        "surface-dim": "#dbd9dd",
+                        "inverse-on-surface": "#f1f0f4",
+                        "surface-container": "#efedf1",
+                        "primary": "#005bbf",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#0e0200",
+                        "on-primary-container": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1a73e8",
+                        "surface": "#faf9fd",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2f3033",
+                        "on-surface": "#1a1b1e",
+                        "primary-fixed": "#d8e2ff",
+                        "tertiary-fixed": "#ffdbcb",
+                        "outline": "#727785",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#5f6366",
+                        "secondary-container": "#dde0e3",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#faf9fd",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#adc7ff",
+                        "outline-variant": "#c1c6d6",
+                        "tertiary-container": "#c55500",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb691",
+                        "inverse-primary": "#adc7ff",
+                        "surface-container-low": "#f4f3f7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-tertiary-fixed": "#341100",
+                        "secondary": "#5b5f62",
+                        "on-secondary-fixed": "#181c1f",
+                        "surface-container-high": "#e9e7eb",
+                        "on-primary-fixed": "#001a41",
+                        "background": "#faf9fd",
+                        "tertiary": "#9e4300",
+                        "surface-tint": "#005bc0",
+                        "on-background": "#1a1b1e",
+                        "surface-container-highest": "#e3e2e6",
+                        "secondary-fixed": "#e0e3e6",
+                        "surface-variant": "#e3e2e6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "unit": "8px",
+                        "gutter": "16px",
+                        "container-margin": "16px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Atkinson Hyperlegible Next"],
+                        "headline-lg-mobile": ["Atkinson Hyperlegible Next"],
+                        "body-md": ["Atkinson Hyperlegible Next"],
+                        "body-lg": ["Atkinson Hyperlegible Next"],
+                        "display-lg": ["Atkinson Hyperlegible Next"],
+                        "label-lg": ["Atkinson Hyperlegible Next"],
+                        "headline-md": ["Atkinson Hyperlegible Next"],
+                        "label-md": ["Atkinson Hyperlegible Next"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant flex items-center justify-between px-md h-14 z-40">
+<div class="flex items-center gap-sm">
+<button class="p-sm rounded-full text-on-surface-variant hover:bg-surface-container transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Contrast Reference</h1>
+</div>
+<button class="p-sm rounded-full text-on-surface-variant hover:bg-surface-container transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="contrast">contrast</span>
+</button>
+</header>
+<main class="flex-grow w-full max-w-4xl mx-auto px-container-margin py-xl flex flex-col gap-xl">
+<!-- Introductory Section -->
+<section class="flex flex-col gap-md">
+<h2 class="font-display-lg text-display-lg text-on-surface">Metadata Contrast Requirements</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+                To meet Web Content Accessibility Guidelines (WCAG) AA standards, text must have a minimum contrast ratio of 4.5:1 against its background. This ensures legibility for users with visual impairments. Often, supplementary text like metadata (dates, statuses) is styled too lightly, causing it to fail these essential checks.
+            </p>
+</section>
+<!-- Cards Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg w-full">
+<!-- Current (Failing) Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Project Metadata</h3>
+<div class="bg-error-container text-on-error-container font-label-lg text-label-lg px-sm py-xs rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="cancel" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span>Fail (2.6:1)</span>
+</div>
+</div>
+<div class="flex flex-col gap-sm mt-md p-md bg-surface-container-low rounded-lg border border-outline-variant border-dashed">
+<!-- Deliberately low contrast text inline style for demonstration as requested -->
+<p class="font-body-md text-body-md flex items-center gap-sm" style="color: #9AA0A6;">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Created: Oct 12, 2023
+                    </p>
+<p class="font-body-md text-body-md flex items-center gap-sm" style="color: #9AA0A6;">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                        Status: In Progress
+                    </p>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-auto pt-md border-t border-outline-variant">
+                    Using #9AA0A6 on #FFFFFF fails the 4.5:1 ratio requirement.
+                </p>
+</article>
+<!-- Updated (Passing) Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#1e8e3e]"></div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Project Metadata</h3>
+<div class="bg-[#e6f4ea] text-[#137333] font-label-lg text-label-lg px-sm py-xs rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Pass (5.1:1)</span>
+</div>
+</div>
+<div class="flex flex-col gap-sm mt-md p-md bg-surface-container-low rounded-lg border border-outline-variant border-dashed">
+<!-- High contrast text using design system tokens representing #5F6368 or darker -->
+<p class="font-body-md text-body-md text-on-secondary-container flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Created: Oct 12, 2023
+                    </p>
+<p class="font-body-md text-body-md text-on-secondary-container flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                        Status: In Progress
+                    </p>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-auto pt-md border-t border-outline-variant">
+                    Using system token <code class="bg-surface-container px-xs py-[2px] rounded font-mono text-[10px]">text-on-secondary-container</code> passes easily.
+                </p>
+</article>
+</div>
+</main>
+<!-- Footer Summary -->
+<footer class="mt-auto border-t border-outline-variant bg-surface-container-low py-lg px-container-margin pb-[100px] md:pb-lg">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">WCAG 2.1 AA Guidelines Summary</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Ensure all text, including metadata and labels, meets the 4.5:1 ratio against solid backgrounds.</p>
+</div>
+<button class="bg-surface border-2 border-on-secondary-container text-on-secondary-container font-label-lg text-label-lg px-md py-sm rounded-full hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-sm">
+<span class="material-symbols-outlined">launch</span>
+                View Full Documentation
+            </button>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant h-20 px-gutter flex justify-around items-center">
+<!-- Dashboard / Overview -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-xs hover:bg-surface-container-high scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md mt-xs">Overview</span>
+</button>
+<!-- Guidelines (Active) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-lg py-xs scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="rule" style="font-variation-settings: 'FILL' 1;">rule</span>
+<span class="font-label-md text-label-md mt-xs">Guidelines</span>
+</button>
+<!-- Settings -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-xs hover:bg-surface-container-high scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md mt-xs">Settings</span>
+</button>
+</nav>
+</body></html>
