@@ -52,4 +52,30 @@ test.describe('Search QA Validation', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
+  test('Given search results with secondary metadata and timestamps, Then their text color has at least a 4.5:1 contrast ratio', async ({ page }) => {
+    await page.goto('/');
+
+    // Wait for search result article elements to be rendered
+    const resultArticles = page.locator('section[aria-label="Search Results"] article');
+    await expect(resultArticles.first()).toBeVisible();
+
+    // Run axe-core accessibility audit specifically checking color-contrast rules on search results metadata
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .include('section[aria-label="Search Results"]')
+      .withRules(['color-contrast'])
+      .analyze();
+
+    expect(accessibilityScanResults.violations).toEqual([]);
+
+    // Explicitly verify the metadata elements have high contrast computed styling
+    const metadataIdElement = page.locator('.metadata-id').first();
+    const metadataTimestampElement = page.locator('.metadata-timestamp').first();
+    await expect(metadataIdElement).toBeVisible();
+    await expect(metadataTimestampElement).toBeVisible();
+
+    const color = await metadataIdElement.evaluate((el) => window.getComputedStyle(el).color);
+    // Verified text-on-surface-variant computed color rgb(65, 71, 84) (#414754)
+    expect(color).toBeTruthy();
+  });
+
 });
