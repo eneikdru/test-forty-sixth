@@ -73,7 +73,7 @@ public class EpidemiologicalMaterialController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> getMaterialById(@PathVariable("id") Long id) {
         if (id == null || id <= 0) {
             ErrorResponse error = new ErrorResponse(

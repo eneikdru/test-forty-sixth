@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <title>Epidemiological Knowledge Base - Search</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#0050cb",
+            "on-primary": "#ffffff",
+            "surface": "#f9f9ff",
+            "on-surface": "#111c2d",
+            "on-surface-variant": "#424656",
+            "outline": "#727687",
+            "outline-variant": "#c2c6d8",
+            "primary-fixed": "#dae1ff",
+            "on-primary-fixed": "#001849",
+            "surface-variant": "#d8e3fb",
+            "surface-container-high": "#dee8ff",
+            "secondary-container": "#d5e3fc",
+            "on-secondary-container": "#0d1c2e",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "stack-lg": "32px",
+            "margin-mobile": "16px",
+            "stack-sm": "8px",
+            "margin-desktop": "40px",
+            "container-max-width": "1280px",
+            "stack-md": "16px"
+          },
+          "fontFamily": {
+            "headline-md": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f9f9ff;
+      color: #111c2d;
+      min-height: max(884px, 100dvh);
+    }
+    .search-input-wrapper:focus-within {
+      border-color: #0050cb;
+      box-shadow: 0 0 0 2px rgba(0, 80, 203, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col pt-14 pb-16">
+  <!-- Top Header -->
+  <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile h-14" role="banner">
+    <button
+      class="text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 p-3 rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Back to dashboard"
+      type="button"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+    </button>
+    <h1 class="font-headline-md text-xl font-semibold text-primary text-center flex-1">
+      Epidemiological Knowledge Base
+    </h1>
+    <button
+      class="text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 p-3 rounded-full min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary"
+      aria-label="Close search"
+      type="button"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  </header>
+
+  <!-- Main Content Canvas -->
+  <main class="flex-1 w-full max-w-container-max-width mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-stack-lg" role="main">
+    <!-- Search Input Area -->
+    <section aria-label="Search Input Section" class="w-full">
+      <form id="search-form" class="search-input-wrapper relative flex items-center w-full h-[56px] bg-white border border-outline-variant rounded-lg transition-all" onsubmit="handleSearchSubmit(event)">
+        <span class="material-symbols-outlined text-outline ml-4" aria-hidden="true">search</span>
+        <input
+          id="search-input"
+          autofocus
+          class="flex-1 h-full bg-transparent border-none focus:ring-0 px-4 font-body-lg text-on-surface placeholder-outline-variant"
+          placeholder="Search materials by title, protocol, or pathogen..."
+          type="search"
+          aria-label="Search materials query"
+        />
+        <button
+          id="clear-btn"
+          type="button"
+          onclick="clearSearchInput()"
+          class="mr-2 text-outline hover:text-primary min-w-[44px] min-h-[44px] hidden items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+          aria-label="Clear search"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">cancel</span>
+        </button>
+        <button
+          type="submit"
+          class="mr-2 px-4 py-2 bg-primary text-on-primary rounded-md font-medium min-h-[44px] flex items-center gap-2 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary active:scale-95 transition-transform"
+          aria-label="Execute search"
+        >
+          <span>Search</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Pathogen Type Filters (Chips) -->
+    <section aria-label="Pathogen Quick Filters" class="flex flex-col gap-stack-sm">
+      <h2 class="font-label-md text-xs font-semibold text-outline uppercase tracking-wider">
+        Pathogen Category
+      </h2>
+      <div id="filter-chips" class="flex flex-wrap gap-2" role="group" aria-label="Filter documents by pathogen">
+        <button
+          type="button"
+          data-pathogen=""
+          onclick="selectPathogenFilter('')"
+          class="filter-chip chip-active px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-primary text-on-primary border-primary"
+          aria-pressed="true"
+        >
+          All Pathogens
+        </button>
+        <button
+          type="button"
+          data-pathogen="VIRUS"
+          onclick="selectPathogenFilter('VIRUS')"
+          class="filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant"
+          aria-pressed="false"
+        >
+          Virus
+        </button>
+        <button
+          type="button"
+          data-pathogen="BACTERIA"
+          onclick="selectPathogenFilter('BACTERIA')"
+          class="filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant"
+          aria-pressed="false"
+        >
+          Bacteria
+        </button>
+        <button
+          type="button"
+          data-pathogen="PARASITE"
+          onclick="selectPathogenFilter('PARASITE')"
+          class="filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant"
+          aria-pressed="false"
+        >
+          Parasite
+        </button>
+        <button
+          type="button"
+          data-pathogen="FUNGI"
+          onclick="selectPathogenFilter('FUNGI')"
+          class="filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant"
+          aria-pressed="false"
+        >
+          Fungi
+        </button>
+        <button
+          type="button"
+          data-pathogen="OTHER"
+          onclick="selectPathogenFilter('OTHER')"
+          class="filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant"
+          aria-pressed="false"
+        >
+          Other
+        </button>
+      </div>
+    </section>
+
+    <!-- Results / Loading / No-Results Container -->
+    <section id="results-section" aria-live="polite" aria-atomic="true" class="flex flex-col gap-stack-md mt-2">
+      <!-- Loading State Indicator (Hidden by default, shown during search) -->
+      <div id="loading-indicator" class="hidden flex-col items-center justify-center p-12 bg-white border border-outline-variant/30 rounded-lg text-center" role="status">
+        <div class="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4" aria-hidden="true"></div>
+        <p class="font-body-lg text-primary font-medium">Searching epidemiological documents...</p>
+        <span class="sr-only">Loading search results</span>
+      </div>
+
+      <!-- No Results State (Hidden by default) -->
+      <div id="no-results-message" class="hidden flex-col items-center justify-center p-12 bg-white border border-outline-variant/30 rounded-lg text-center gap-3" role="region" aria-label="No results found">
+        <span class="material-symbols-outlined text-4xl text-outline" aria-hidden="true">search_off</span>
+        <h3 class="font-headline-md text-xl font-semibold text-on-surface">No results found</h3>
+        <p class="font-body-md text-outline max-w-md">
+          No epidemiological materials matched your query. Try adjusting your search term or selecting a different pathogen category.
+        </p>
+        <button
+          type="button"
+          onclick="resetSearchAndFilters()"
+          class="mt-2 px-5 py-2.5 bg-secondary-container text-on-secondary-container rounded-lg font-medium min-h-[44px] hover:bg-secondary-container/80 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          Clear Filters & Retry
+        </button>
+      </div>
+
+      <!-- Results Count Header & Container -->
+      <div id="results-count-container" class="hidden items-center justify-between pb-2 border-b border-outline-variant/30">
+        <p id="results-count" class="font-label-md text-xs text-outline uppercase tracking-wider font-semibold">
+          Found 0 documents
+        </p>
+      </div>
+
+      <!-- Search Results List -->
+      <div id="results-list" class="grid grid-cols-1 gap-4">
+        <!-- Result Cards inserted via JS -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let activePathogen = '';
+
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-btn');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const noResultsMessage = document.getElementById('no-results-message');
+    const resultsCountContainer = document.getElementById('results-count-container');
+    const resultsCount = document.getElementById('results-count');
+    const resultsList = document.getElementById('results-list');
+
+    searchInput.addEventListener('input', () => {
+      if (searchInput.value.trim().length > 0) {
+        clearBtn.classList.remove('hidden');
+        clearBtn.classList.add('flex');
+      } else {
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('flex');
+      }
+    });
+
+    function clearSearchInput() {
+      searchInput.value = '';
+      clearBtn.classList.add('hidden');
+      clearBtn.classList.remove('flex');
+      executeSearch();
+    }
+
+    function selectPathogenFilter(pathogen) {
+      activePathogen = pathogen;
+      const chips = document.querySelectorAll('.filter-chip');
+      chips.forEach(chip => {
+        const isMatch = chip.getAttribute('data-pathogen') === pathogen;
+        chip.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+        if (isMatch) {
+          chip.className = 'filter-chip chip-active px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-primary text-on-primary border-primary';
+        } else {
+          chip.className = 'filter-chip px-4 py-2.5 rounded-full text-sm font-medium border transition-colors min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-primary bg-white text-on-surface border-outline-variant/50 hover:bg-surface-variant';
+        }
+      });
+      executeSearch();
+    }
+
+    function resetSearchAndFilters() {
+      searchInput.value = '';
+      clearBtn.classList.add('hidden');
+      clearBtn.classList.remove('flex');
+      selectPathogenFilter('');
+    }
+
+    function handleSearchSubmit(event) {
+      event.preventDefault();
+      executeSearch();
+    }
+
+    async function executeSearch() {
+      const query = searchInput.value.trim();
+
+      // Show Loading State
+      loadingIndicator.classList.remove('hidden');
+      loadingIndicator.classList.add('flex');
+      noResultsMessage.classList.add('hidden');
+      noResultsMessage.classList.remove('flex');
+      resultsCountContainer.classList.add('hidden');
+      resultsCountContainer.classList.remove('flex');
+      resultsList.innerHTML = '';
+
+      try {
+        const params = new URLSearchParams();
+        if (query) params.append('query', query);
+        if (activePathogen) params.append('pathogenType', activePathogen);
+        params.append('page', '0');
+        params.append('size', '20');
+
+        const response = await fetch('/api/v1/materials/search?' + params.toString());
+        if (!response.ok) {
+          throw new Error('Search failed');
+        }
+
+        const data = await response.json();
+        const items = data.content || [];
+
+        loadingIndicator.classList.add('hidden');
+        loadingIndicator.classList.remove('flex');
+
+        if (items.length === 0) {
+          noResultsMessage.classList.remove('hidden');
+          noResultsMessage.classList.add('flex');
+        } else {
+          resultsCountContainer.classList.remove('hidden');
+          resultsCountContainer.classList.add('flex');
+          resultsCount.textContent = `Found ${data.totalElements} ${data.totalElements === 1 ? 'document' : 'documents'}`;
+
+          items.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'bg-white border border-outline-variant/50 p-5 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-md transition-shadow';
+            card.innerHTML = `
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed uppercase tracking-wide">
+                    ${escapeHtml(item.pathogenType || 'OTHER')}
+                  </span>
+                  <span class="text-xs text-outline">ID: ${item.id}</span>
+                </div>
+                <h3 class="font-headline-md text-lg text-on-surface font-semibold mt-1">
+                  ${escapeHtml(item.title || 'Untitled Document')}
+                </h3>
+                ${item.createdAt ? `<p class="font-label-sm text-xs text-outline mt-1">Cataloged: ${new Date(item.createdAt).toLocaleDateString()}</p>` : ''}
+              </div>
+              ${item.downloadUrl ? `
+                <a
+                  href="${escapeHtml(item.downloadUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="self-start md:self-center px-4 py-2.5 bg-primary text-on-primary rounded-lg font-medium text-sm flex items-center gap-2 min-h-[44px] hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary active:scale-95 transition-transform"
+                  aria-label="Download document ${escapeHtml(item.title)}"
+                >
+                  <span class="material-symbols-outlined text-[20px]" aria-hidden="true">download</span>
+                  <span>Download</span>
+                </a>
+              ` : ''}
+            `;
+            resultsList.appendChild(card);
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        loadingIndicator.classList.add('hidden');
+        loadingIndicator.classList.remove('flex');
+        noResultsMessage.classList.remove('hidden');
+        noResultsMessage.classList.add('flex');
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Initial search on load
+    document.addEventListener('DOMContentLoaded', () => {
+      executeSearch();
+    });
+  </script>
+</body>
+</html>
