@@ -1,0 +1,84 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "54e64e5f-940a-4fd5-aafa-592a8b241bf1",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Investigate and categorize the root cause of the review concerns stream anomaly and apply a patch."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Analyze and patch search pattern review concerns",
+          "roleTag": "BARCAN-TAG-09",
+          "jtbd": "When implementing the pattern categorization for this epic, I want to identify and patch the missing invariant pattern, so that the review concerns rate drops back to the 0.0000 centerline.",
+          "acceptanceCriteria": "Given a statistically significant pattern of review concerns,\nWhen the root cause is analyzed,\nThen a new invariant pattern should be defined or the existing code patched to prevent the concern, and automated tests must verify the patch.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Review concern root cause analysis bottleneck",
+          "sixSigmaMetric": "Decrease reviewConcerns stream to 0.0000",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Fix application runtime launch and health check",
+      "jtbd": "When the application is deployed, I want it to launch successfully and pass its health checks, so that users and reviewers can access the system.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Increase successful launch rate to 100%",
+      "tocConstraintRef": "Application startup phase",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: The application must start up without crashing.",
+        "R2: The application must pass its internal health checks after startup."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch application startup and health check",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the runtime fix for this epic, I want to resolve the launch failure, so that the application passes health checks.",
+          "acceptanceCriteria": "Given the application is built and deployed,\nWhen it starts up,\nThen it should not crash and should return a healthy status on its health check endpoint, with all launch tests passing.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Container orchestration phase",
+          "sixSigmaMetric": "100% health check pass rate",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "7400da12-6696-47aa-b94c-401c374028d3",
+      "sourceIndex": 2,
+      "requirements": [
+        "R1: Fix low contrast text colors for secondary metadata and timestamps against dark backgrounds."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Fix contrast for secondary metadata and timestamps",
+          "roleTag": "BARCAN-TAG-11",
+          "jtbd": "When implementing the contrast fix for this epic, I want to increase the contrast ratio of metadata text, so that it meets WCAG accessibility guidelines.",
+          "acceptanceCriteria": "Given a dark background,\nWhen secondary metadata or timestamps are displayed,\nThen their text color should have at least a 4.5:1 contrast ratio, verified by automated UI accessibility tests.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Frontend styling",
+          "sixSigmaMetric": "100% WCAG AA compliance for metadata contrast",
+          "hasUi": true,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    }
+  ]
+}
