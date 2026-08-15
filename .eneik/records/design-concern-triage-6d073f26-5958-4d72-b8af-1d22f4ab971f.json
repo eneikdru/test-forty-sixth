@@ -1,0 +1,20 @@
+[
+  {
+    "concern": "(low) Secondary metadata and timestamps use low contrast text colors against dark background.",
+    "jtbd": "When scanning event logs and system status telemetry in dark mode, I want secondary metadata and timestamps to have sufficient contrast against the background, so that I can comfortably read context and timing without visual fatigue or perceptual errors.",
+    "acceptanceCriteria": "Given secondary metadata and timestamp text elements rendered on dark background surfaces in the UI mockup, When inspecting computed text contrast ratios according to WCAG 2.1 AA standards, Then all body-sm and label-caps text elements maintain a contrast ratio of at least 4.5:1 against their underlying container background.",
+    "editInstruction": "In design/approved/20260815112920-mockup/mockup.html, replace low-contrast text utility classes on timestamps and metadata badges (such as text-on-surface-variant/60 and text-on-tertiary-container) with higher-contrast text classes like text-on-surface-variant or text-on-surface that achieve a WCAG 2.1 AA compliant contrast ratio >= 4.5:1 against background containers.",
+    "kanoClass": "must_be",
+    "cynefinDomain": "clear",
+    "leanValue": "essential"
+  },
+  {
+    "concern": "(low) Horizontal scroll region for active modules lacks explicit scroll indicators on non-touch devices.",
+    "jtbd": "When interacting with the Active Modules section on non-touch desktop devices, I want visible affordances such as subtle scrollbars or navigation arrows, so that I immediately perceive the existence of off-screen modules and can easily navigate across the horizontal scroll container.",
+    "acceptanceCriteria": "Given the Active Modules section on a non-touch desktop device, When viewing or hovering over the horizontal overflow container, Then visual scroll affordances (such as custom styled scrollbars or visible left/right scroll controls) are displayed to indicate overflow and enable pointer navigation.",
+    "editInstruction": "In design/approved/20260815112920-mockup/mockup.html, remove the hide-scrollbar utility class from the Active Modules flex overflow-x-auto container or add visible left/right arrow buttons in the section header that allow desktop users to scroll horizontally.",
+    "kanoClass": "performance",
+    "cynefinDomain": "clear",
+    "leanValue": "valuable"
+  }
+]
