@@ -1,6 +1,6 @@
-import MaterialEditor from './components/MaterialEditor.svelte';
+import DocumentSearch from './components/DocumentSearch.svelte';
 
-const app = new MaterialEditor({
+const app = new DocumentSearch({
   target: document.getElementById('app'),
 });
 
