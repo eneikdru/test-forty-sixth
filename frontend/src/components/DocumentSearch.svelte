@@ -280,7 +280,7 @@
     {/if}
 
     <!-- Search Results / Loading / Empty States -->
-    <section aria-label="Search Results" class="flex flex-col gap-4 mt-2">
+    <section aria-label="Search Results" aria-busy={isLoading} class="flex flex-col gap-4 mt-2">
       <div class="flex items-center justify-between border-b border-outline-variant pb-2">
         <h2 class="font-headline-md text-lg font-semibold text-on-surface">
           Results {#if hasSearched && !isLoading}({totalElements}){/if}
