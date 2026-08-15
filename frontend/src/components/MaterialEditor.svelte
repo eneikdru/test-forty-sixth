@@ -260,7 +260,7 @@
           <button
             type="button"
             on:click={openUnpublishModal}
-            class="text-[#ba1a1a] bg-[#ffdad6] hover:bg-[#ffb596] font-bold text-sm transition-colors active:scale-95 px-3 py-2 rounded-lg border border-[#ba1a1a]"
+            class="text-[#690005] bg-[#ffdad6] hover:bg-[#ffb4ab] font-bold text-sm transition-colors active:scale-95 px-3 py-2 rounded-lg border border-[#ba1a1a]"
           >
             Unpublish
           </button>
