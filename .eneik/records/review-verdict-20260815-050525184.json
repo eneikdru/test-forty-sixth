@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR #0 includes committed binary artifact files (.png files) under .eneik/records/, which violates the blocking rule against committing generated/build artifacts and orchestration internal files.",
+      "concerns": []
+    }
+  ]
+}
