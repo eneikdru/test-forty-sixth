@@ -1,6 +1,6 @@
-import TelemetryDispatch from './components/TelemetryDispatch.svelte';
+import DocumentSearch from './components/DocumentSearch.svelte';
 
-const app = new TelemetryDispatch({
+const app = new DocumentSearch({
   target: document.getElementById('app'),
 });
 
