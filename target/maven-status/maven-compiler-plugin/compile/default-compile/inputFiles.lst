@@ -1,0 +1,4 @@
+/app/src/main/java/com/eneik/generated/TelemetryApplication.java
+/app/src/main/java/com/eneik/generated/domain/TelemetryEvent.java
+/app/src/main/java/com/eneik/generated/dto/MonthlyMetricDto.java
+/app/src/main/java/com/eneik/generated/repository/TelemetryEventRepository.java

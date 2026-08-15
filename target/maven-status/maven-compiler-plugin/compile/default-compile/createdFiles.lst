@@ -1,0 +1,4 @@
+com/eneik/generated/domain/TelemetryEvent.class
+com/eneik/generated/repository/TelemetryEventRepository.class
+com/eneik/generated/dto/MonthlyMetricDto.class
+com/eneik/generated/TelemetryApplication.class
