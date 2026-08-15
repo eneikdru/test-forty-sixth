@@ -33,10 +33,11 @@
   let currentAbortController = null;
 
   function handleInput() {
+    isLoading = true;
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
       executeSearch();
-    }, 300);
+    }, 200);
   }
 
   function handleRecentClick(term) {
@@ -214,7 +215,6 @@
           aria-label="Search files, protocols, or pathogens"
           bind:value={query}
           on:input={handleInput}
-          autofocus
           class="flex-1 h-full bg-transparent border-none focus:ring-0 px-4 font-body-lg text-on-surface placeholder:text-outline-variant text-base outline-none"
           placeholder="Search files, protocols, or pathogens..."
           type="search"
