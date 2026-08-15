@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR commits generated image files (.png) under .eneik/records/ directory, which violates repository boundaries and rules against committing build/generated artifacts under .eneik/.",
+      "concerns": []
+    }
+  ]
+}
