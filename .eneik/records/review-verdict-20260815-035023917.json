@@ -1,0 +1,10 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "block",
+      "criticalReason": "PR #0 commits generated build artifacts under target/ (.class files, maven status, surefire test reports) and binary screenshots under .eneik/ (.png files), violating commit hygiene and boundary constraints.",
+      "concerns": []
+    }
+  ]
+}
