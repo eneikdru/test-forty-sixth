@@ -1,0 +1,302 @@
+openapi: 3.0.3
+info:
+  title: Telemetry API Contract
+  description: Shared API contract for reporting telemetry events (including search and publication events) and querying monthly aggregated telemetry metrics in Epidemiology Knowledge Base.
+  version: 1.0.0
+paths:
+  /api/v1/telemetry/events:
+    post:
+      summary: Track a telemetry event
+      description: Ingests a single telemetry event (e.g., search or publication tracking) for metrics reporting.
+      operationId: trackEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryEventRequest'
+      responses:
+        '201':
+          description: Event successfully recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryEventResponse'
+        '400':
+          description: Invalid request payload or missing required telemetry fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error while processing telemetry event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/telemetry/events/batch:
+    post:
+      summary: Track a batch of telemetry events
+      description: Ingests multiple telemetry events in a single batch request for efficient client reporting.
+      operationId: trackBatchEvents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TelemetryEventRequest'
+      responses:
+        '201':
+          description: Batch of telemetry events successfully recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchTelemetryEventResponse'
+        '400':
+          description: Malformed payload or validation error in batch payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during batch telemetry ingestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/telemetry/metrics/monthly:
+    get:
+      summary: Retrieve monthly aggregated metrics
+      description: Queries aggregated event counts grouped by year, month, and event type.
+      operationId: getMonthlyMetrics
+      responses:
+        '200':
+          description: Aggregated monthly metrics retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MonthlyMetricDto'
+        '500':
+          description: Internal server error while fetching metrics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    TelemetryEventRequest:
+      type: object
+      required:
+        - eventType
+        - timestamp
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique telemetry event identifier. Generated if not supplied.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        eventType:
+          type: string
+          description: Category or type of telemetry event (e.g., SEARCH, PUBLICATION, LOGIN).
+          example: SEARCH
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp when the event occurred.
+          example: '2026-08-15T10:00:00Z'
+        payload:
+          oneOf:
+            - $ref: '#/components/schemas/SearchEventPayload'
+            - $ref: '#/components/schemas/PublicationEventPayload'
+            - type: object
+              additionalProperties: true
+          description: Event payload containing event-specific metadata.
+
+    SearchEventPayload:
+      type: object
+      required:
+        - latencyMs
+        - resultCount
+      properties:
+        query:
+          type: string
+          description: Search term or query string entered by user.
+          example: influenza protocols
+        latencyMs:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Search execution duration in milliseconds. Required for search telemetry.
+          example: 120
+        latency:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Alias for search execution latency in milliseconds.
+          example: 120
+        resultCount:
+          type: integer
+          minimum: 0
+          description: Total number of search results returned. Required for search telemetry.
+          example: 15
+        pathogenType:
+          type: string
+          description: Pathogen filter applied during search if any.
+          example: VIRUS
+
+    SearchTelemetryEvent:
+      type: object
+      required:
+        - eventType
+        - timestamp
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        eventType:
+          type: string
+          enum: [SEARCH]
+          example: SEARCH
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T10:00:00Z'
+        payload:
+          $ref: '#/components/schemas/SearchEventPayload'
+
+    PublicationEventPayload:
+      type: object
+      required:
+        - materialId
+      properties:
+        materialId:
+          type: string
+          format: uuid
+          description: Unique identifier of the published material. Required for publication telemetry.
+          example: 00000000-0000-0000-0000-000000000001
+        title:
+          type: string
+          description: Title of the published epidemiological material.
+          example: Influenza Surveillance Protocol 2026
+        pathogenType:
+          type: string
+          description: Associated pathogen classification.
+          example: VIRUS
+        action:
+          type: string
+          description: Publication action (e.g., PUBLISH, UNPUBLISH, UPDATE).
+          example: PUBLISH
+
+    PublicationTelemetryEvent:
+      type: object
+      required:
+        - eventType
+        - timestamp
+        - payload
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        eventType:
+          type: string
+          enum: [PUBLICATION]
+          example: PUBLICATION
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T10:05:00Z'
+        payload:
+          $ref: '#/components/schemas/PublicationEventPayload'
+
+    TelemetryEventResponse:
+      type: object
+      required:
+        - id
+        - eventType
+        - timestamp
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        eventType:
+          type: string
+          example: SEARCH
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T10:00:00Z'
+        status:
+          type: string
+          example: RECORDED
+
+    BatchTelemetryEventResponse:
+      type: object
+      required:
+        - processedCount
+        - status
+      properties:
+        processedCount:
+          type: integer
+          example: 5
+        status:
+          type: string
+          example: SUCCESS
+
+    MonthlyMetricDto:
+      type: object
+      required:
+        - year
+        - month
+        - eventType
+        - count
+      properties:
+        year:
+          type: integer
+          example: 2026
+        month:
+          type: integer
+          example: 8
+        eventType:
+          type: string
+          example: SEARCH
+        count:
+          type: integer
+          format: int64
+          example: 142
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - timestamp
+      properties:
+        code:
+          type: string
+          example: INVALID_PAYLOAD
+        message:
+          type: string
+          example: Search telemetry payload requires latency and resultCount fields.
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T10:00:00Z'
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - Field 'latencyMs' is required for eventType 'SEARCH'.
