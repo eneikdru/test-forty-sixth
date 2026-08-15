@@ -1,6 +1,6 @@
-import TelemetryDispatch from './components/TelemetryDispatch.svelte';
+import MaterialEditor from './components/MaterialEditor.svelte';
 
-const app = new TelemetryDispatch({
+const app = new MaterialEditor({
   target: document.getElementById('app'),
 });
 
