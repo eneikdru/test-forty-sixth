@@ -1,0 +1,34 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "54e64e5f-940a-4fd5-aafa-592a8b241bf1",
+      "sixSigmaMetric": "Increase the successful search retrieval rate of relevant protocols to 95%",
+      "tocConstraintRef": "search-retrieval-quality",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Investigate and categorize the newly detected pattern of design review concerns in the protocol search implementation",
+        "R2: Patch the existing code directly to assign a concrete rootCausePatternId to the uncategorized defect events",
+        "R3: Verify the patch with targeted tests to ensure the new rootCausePatternId is correctly recorded without causing regressions"
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Assign rootCausePatternId to search defect events",
+          "roleTag": "BARCAN-TAG-02",
+          "jtbd": "When implementing the defect classification for this epic, I want to assign a concrete rootCausePatternId to the uncategorized search review concerns, so that the anomaly is resolved and tracked correctly.",
+          "acceptanceCriteria": "Given the unclassified design review concerns in stream 'reviewConcerns'\nWhen the patch assigns the new rootCausePatternId in the existing code\nThen the stream's u-chart centerline returns to 0.0000\nGiven the need for testing\nWhen running unit tests\nThen the tests verify that rootCausePatternId is properly applied to the events.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "uncategorized-defects-pattern",
+          "sixSigmaMetric": "Reduce uncategorized design review concerns in stream 'reviewConcerns' from u=0.1000 to 0.0000",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2",
+            "R3"
+          ]
+        }
+      ]
+    }
+  ]
+}
