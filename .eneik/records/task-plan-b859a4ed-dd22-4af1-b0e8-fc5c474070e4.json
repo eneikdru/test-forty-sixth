@@ -1,0 +1,68 @@
+{
+  "epics": [
+    {
+      "existingEpicId": null,
+      "title": "Backend Multi-Stage Docker Build",
+      "jtbd": "When a developer clones the repository, I want to build the backend image without pre-compiling locally, so that I can run the system reliably using only Docker.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Reduce local build preparation steps from 1 to 0.",
+      "tocConstraintRef": "Developer onboarding and CI setup",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: The Dockerfile must use a Maven base image to build the JAR artifact.",
+        "R2: The final Docker image must copy the JAR from the Maven stage into a slim Java runtime."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Implement multi-stage backend build",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the Docker build for this epic, I want to separate the Maven build from the runtime image, so that the final image is slim and does not require local pre-compilation.",
+          "acceptanceCriteria": "Given a fresh repository clone with no local Maven artifacts\nWhen the Docker image is built using docker compose\nThen the multi-stage build succeeds and the final image contains only the runtime and compiled JAR",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Build artifact generation",
+          "sixSigmaMetric": "Decrease container build failure rate on fresh clones to 0%.",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Integrated Frontend Docker Build",
+      "jtbd": "When a user accesses the launched product, I want them to see the actual UI rather than a bare API, so that they can interact with the system.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Increase the percentage of successful UI page loads from 0% to 100% on the deployed container.",
+      "tocConstraintRef": "Frontend deployment and accessibility",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: The Dockerfile must include a Node build stage that runs npm ci and npm run build.",
+        "R2: The built static UI files must be served by the backend in the final Docker image."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Integrate frontend build into Dockerfile",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the frontend deployment for this epic, I want to build and serve the static files, so that the deployed container provides both API and UI.",
+          "acceptanceCriteria": "Given the application Dockerfile with integrated Node and Maven stages\nWhen the Docker image is built and the container is launched\nThen the backend serves the built static frontend UI at the root URL",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Static asset serving",
+          "sixSigmaMetric": "Increase container response rate for frontend UI assets to 100%.",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    }
+  ]
+}
