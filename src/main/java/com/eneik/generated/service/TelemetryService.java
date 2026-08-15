@@ -103,6 +103,11 @@ public class TelemetryService {
             if (!hasLatency || !hasResultCount) {
                 throw new IllegalArgumentException("SEARCH event requires latency/latencyMs and resultCount fields.");
             }
+
+            int resultCount = payload.get("resultCount").asInt();
+            if (resultCount == 0 && !payload.has("rootCausePatternId")) {
+                ((com.fasterxml.jackson.databind.node.ObjectNode) payload).put("rootCausePatternId", "UNCATEGORIZED");
+            }
         } else if ("PUBLICATION".equals(eventType)) {
             if (!payload.has("materialId") || payload.get("materialId").isNull() || payload.get("materialId").asText().trim().isEmpty()) {
                 throw new IllegalArgumentException("PUBLICATION event requires materialId field.");
