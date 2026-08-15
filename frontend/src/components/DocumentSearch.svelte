@@ -236,7 +236,7 @@
 
     <!-- Pathogen Quick Filters -->
     <section aria-label="Pathogen Category Quick Filters" class="flex flex-col gap-2">
-      <h2 class="font-label-md text-xs font-semibold text-outline uppercase tracking-wider">
+      <h2 class="font-label-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
         Pathogen Type Filter
       </h2>
       <div class="flex flex-wrap gap-2" role="group" aria-label="Pathogen Types">
@@ -259,7 +259,7 @@
     <!-- Recent Searches -->
     {#if recentSearches.length > 0}
       <section aria-label="Recent Searches" class="flex flex-col gap-2">
-        <h2 class="font-label-md text-xs font-semibold text-outline uppercase tracking-wider">
+        <h2 class="font-label-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
           Recent Searches
         </h2>
         <div class="flex flex-wrap gap-2">
@@ -269,7 +269,7 @@
               on:click={() => handleRecentClick(term)}
               class="bg-white hover:bg-surface-container transition-colors px-4 py-2 min-h-[44px] rounded-full text-sm text-on-surface flex items-center gap-2 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <svg class="w-4 h-4 text-outline" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg class="w-4 h-4 text-on-surface-variant" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>{term}</span>
@@ -316,7 +316,7 @@
             </svg>
           </div>
           <h3 class="font-bold text-lg text-on-surface">No results found</h3>
-          <p class="text-sm text-outline max-w-md">
+          <p class="text-sm text-on-surface-variant max-w-md">
             We couldn't find any documents matching your criteria
             {#if query}<strong>"{query}"</strong>{/if}
             {#if selectedPathogen}with pathogen filter <strong>{selectedPathogen}</strong>{/if}.
@@ -343,14 +343,14 @@
                   <h3 class="font-semibold text-base text-on-surface leading-snug">
                     {item.title}
                   </h3>
-                  <div class="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-outline">
+                  <div class="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-on-surface-variant font-medium">
                     <span class="inline-block px-2 py-0.5 rounded bg-surface-container font-medium text-on-surface-variant">
                       {item.pathogenType || 'UNSPECIFIED'}
                     </span>
                     <span>•</span>
-                    <span>ID: {item.id}</span>
+                    <span class="metadata-id">ID: {item.id}</span>
                     <span>•</span>
-                    <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+                    <span class="metadata-timestamp">{new Date(item.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
               </div>
