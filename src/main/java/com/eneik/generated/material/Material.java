@@ -25,6 +25,9 @@ public class Material {
     @Column(name = "pathogen_type")
     private String pathogenType;
 
+    @Column(name = "dataset_type")
+    private String datasetType;
+
     @NotNull
     @Column(name = "content", nullable = false)
     private String content;
@@ -53,9 +56,14 @@ public class Material {
     }
 
     public Material(UUID id, String title, String pathogenType, String content, String metadata, String status) {
+        this(id, title, pathogenType, null, content, metadata, status);
+    }
+
+    public Material(UUID id, String title, String pathogenType, String datasetType, String content, String metadata, String status) {
         this.id = id;
         this.title = title;
         this.pathogenType = pathogenType;
+        this.datasetType = datasetType;
         this.content = content;
         this.metadata = metadata;
         this.status = status != null ? status : "DRAFT";
@@ -84,6 +92,14 @@ public class Material {
 
     public void setPathogenType(String pathogenType) {
         this.pathogenType = pathogenType;
+    }
+
+    public String getDatasetType() {
+        return datasetType;
+    }
+
+    public void setDatasetType(String datasetType) {
+        this.datasetType = datasetType;
     }
 
     public String getContent() {

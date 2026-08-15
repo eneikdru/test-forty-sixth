@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,5 +102,64 @@ class MaterialControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_PAYLOAD"))
                 .andExpect(jsonPath("$.details", hasItem(containsString("title"))));
+    }
+
+    @Test
+    void testCreateStructuredDatasetMaterial_Success() throws Exception {
+        String structuredJsonContent = "{\"metrics\":{\"cases\":1250,\"R0\":2.4,\"mortality_rate\":0.032},\"surveillance_period\":\"2026-Q1\"}";
+        CreateMaterialRequest request = new CreateMaterialRequest(
+                "COVID-19 Q1 Surveillance Dataset",
+                "VIRUS",
+                "EPIDEMIOLOGICAL_DATASET",
+                structuredJsonContent,
+                "{\"region\":\"Region-A\",\"dataQuality\":\"VERIFIED\"}"
+        );
+
+        mockMvc.perform(post("/api/v1/materials")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").value("COVID-19 Q1 Surveillance Dataset"))
+                .andExpect(jsonPath("$.pathogenType").value("VIRUS"))
+                .andExpect(jsonPath("$.datasetType").value("EPIDEMIOLOGICAL_DATASET"))
+                .andExpect(jsonPath("$.content").value(structuredJsonContent))
+                .andExpect(jsonPath("$.status").value("DRAFT"));
+    }
+
+    @Test
+    void testQueryMaterials_ReturnsStructuredDatasetsAndTextualMaterials() throws Exception {
+        // Save textual material
+        Material textualMaterial = new Material(
+                UUID.randomUUID(),
+                "Influenza Outbreak Guidelines",
+                "VIRUS",
+                null,
+                "Standard operational procedures for outbreak containment.",
+                "{\"author\":\"EpiTeam\"}",
+                "PUBLISHED"
+        );
+        materialRepository.save(textualMaterial);
+
+        // Save structured dataset material
+        Material datasetMaterial = new Material(
+                UUID.randomUUID(),
+                "Cholera Surveillance Dataset 2026",
+                "BACTERIA",
+                "EPIDEMIOLOGICAL_DATASET",
+                "{\"metrics\":{\"cases\":430,\"activeHotspots\":12}}",
+                "{\"format\":\"JSON\"}",
+                "PUBLISHED"
+        );
+        materialRepository.save(datasetMaterial);
+
+        mockMvc.perform(get("/api/v1/materials"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[*].title", containsInAnyOrder(
+                        "Influenza Outbreak Guidelines",
+                        "Cholera Surveillance Dataset 2026"
+                )))
+                .andExpect(jsonPath("$[*].datasetType", hasItem("EPIDEMIOLOGICAL_DATASET")));
     }
 }

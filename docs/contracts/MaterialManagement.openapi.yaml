@@ -177,9 +177,13 @@ components:
           type: string
           description: Type or classification of pathogen.
           example: VIRUS
+        datasetType:
+          type: string
+          description: Optional classification of structured dataset (e.g., EPIDEMIOLOGICAL_DATASET, SURVEILLANCE_METRICS).
+          example: EPIDEMIOLOGICAL_DATASET
         content:
           type: string
-          description: Detailed material text, clinical guidelines, or research data.
+          description: Detailed material text, clinical guidelines, research data, or JSON structured dataset.
           example: Detailed containment and monitoring protocols for Influenza A...
         metadata:
           type: string
@@ -238,6 +242,9 @@ components:
         pathogenType:
           type: string
           example: VIRUS
+        datasetType:
+          type: string
+          example: EPIDEMIOLOGICAL_DATASET
         content:
           type: string
           example: Detailed containment and monitoring protocols for Influenza A...

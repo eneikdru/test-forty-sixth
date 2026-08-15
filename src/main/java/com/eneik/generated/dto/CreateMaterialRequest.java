@@ -10,6 +10,8 @@ public class CreateMaterialRequest {
     @NotBlank(message = "Pathogen type is required")
     private String pathogenType;
 
+    private String datasetType;
+
     @NotBlank(message = "Content is required")
     private String content;
 
@@ -19,8 +21,13 @@ public class CreateMaterialRequest {
     }
 
     public CreateMaterialRequest(String title, String pathogenType, String content, String metadata) {
+        this(title, pathogenType, null, content, metadata);
+    }
+
+    public CreateMaterialRequest(String title, String pathogenType, String datasetType, String content, String metadata) {
         this.title = title;
         this.pathogenType = pathogenType;
+        this.datasetType = datasetType;
         this.content = content;
         this.metadata = metadata;
     }
@@ -39,6 +46,14 @@ public class CreateMaterialRequest {
 
     public void setPathogenType(String pathogenType) {
         this.pathogenType = pathogenType;
+    }
+
+    public String getDatasetType() {
+        return datasetType;
+    }
+
+    public void setDatasetType(String datasetType) {
+        this.datasetType = datasetType;
     }
 
     public String getContent() {
