@@ -1,0 +1,30 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "5b29f5d9-bf2d-47b3-93fc-b701ea2e1929",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: The continuous integration build pipeline and Dockerfiles must be patched to execute tests by removing the '-DskipTests' flag.",
+        "R2: The pull request approval gating logic must be updated to reject placeholder or auto-generated approvals that lack substantive critique or logic."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Enforce test execution and genuine code reviews",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the pipeline fixes for this epic, I want to remove test bypassing and enforce review criteria, so that automated code review integrity is achieved.",
+          "acceptanceCriteria": "Given a Dockerfile or pipeline configuration\nWhen the build command is executed\nThen it must not contain the '-DskipTests' flag and all tests must run.\nGiven a pull request submission\nWhen an automated review is generated\nThen it must be rejected if it lacks genuine reasoning, and accepted only if it contains substantive logic.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "CI/CD Pipeline Security Gate",
+          "sixSigmaMetric": "Reduce the rate of bypassed test executions and faked approvals from >0% to 0%.",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    }
+  ]
+}
