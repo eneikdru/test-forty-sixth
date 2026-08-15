@@ -1,5 +1,6 @@
 package com.eneik.generated.telemetry;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.eneik.generated.domain.TelemetryEvent;
 import com.eneik.generated.dto.LoginRequest;
 import com.eneik.generated.dto.LoginResponse;
@@ -241,6 +242,35 @@ class TelemetryJourneyE2ETest {
     /**
      * Verify batch telemetry ingestion preserves journey metrics across multiple event types.
      */
+    @Test
+    void testSearchDefectCategorization_AssignsRootCausePatternId() throws Exception {
+        Map<String, Object> defectTelemetry = Map.of(
+                "id", "50000000-0000-0000-0000-000000000001",
+                "eventType", "SEARCH",
+                "timestamp", "2026-08-15T13:00:00Z",
+                "payload", Map.of(
+                        "query", "nonexistent protocol",
+                        "latencyMs", 10,
+                        "resultCount", 0
+                )
+        );
+
+        mockMvc.perform(post("/api/v1/telemetry/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(defectTelemetry)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status", is("RECORDED")));
+
+        List<TelemetryEvent> events = telemetryEventRepository.findAll();
+        assertThat(events).hasSize(1);
+        TelemetryEvent event = events.get(0);
+        assertThat(event.getEventType()).isEqualTo("SEARCH");
+
+        JsonNode payloadNode = objectMapper.readTree(event.getPayload());
+        assertThat(payloadNode.has("rootCausePatternId")).isTrue();
+        assertThat(payloadNode.get("rootCausePatternId").asText()).isEqualTo("UNCATEGORIZED");
+    }
+
     @Test
     void testBatchTelemetryIngestion_IncrementsEventLogMetrics() throws Exception {
         List<Map<String, Object>> batch = List.of(
