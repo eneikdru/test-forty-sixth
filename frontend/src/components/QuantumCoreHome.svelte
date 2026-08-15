@@ -1,5 +1,53 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+
+  let scrollContainer;
+  let canScrollLeft = false;
+  let canScrollRight = true;
+  let isNonTouch = true;
+
+  function updateScrollState() {
+    if (!scrollContainer) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+    canScrollLeft = scrollLeft > 2;
+    canScrollRight = scrollWidth > clientWidth ? scrollLeft < scrollWidth - clientWidth - 2 : true;
+  }
+
+  function handleScrollLeft() {
+    if (!scrollContainer) return;
+    scrollContainer.scrollBy({ left: -280, behavior: 'smooth' });
+  }
+
+  function handleScrollRight() {
+    if (!scrollContainer) return;
+    scrollContainer.scrollBy({ left: 280, behavior: 'smooth' });
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'ArrowRight') {
+      handleScrollRight();
+    } else if (event.key === 'ArrowLeft') {
+      handleScrollLeft();
+    }
+  }
+
+  onMount(() => {
+    isNonTouch = !window.matchMedia('(pointer: coarse)').matches;
+    canScrollRight = true;
+    updateScrollState();
+    window.addEventListener('resize', updateScrollState);
+
+    let resizeObserver;
+    if (typeof ResizeObserver !== 'undefined' && scrollContainer) {
+      resizeObserver = new ResizeObserver(() => updateScrollState());
+      resizeObserver.observe(scrollContainer);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateScrollState);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  });
 </script>
 
 <svelte:head>
@@ -22,7 +70,7 @@
       <h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg font-display-lg text-display-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
         QuantumCore
       </h1>
-      <button class="hover:opacity-80 transition-opacity active:scale-95 duration-300 ease-out p-2 rounded-full glass-panel flex items-center justify-center cursor-pointer">
+      <button aria-label="Notifications" class="hover:opacity-80 transition-opacity active:scale-95 duration-300 ease-out p-2 rounded-full glass-panel flex items-center justify-center cursor-pointer">
         <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">notifications</span>
       </button>
     </div>
@@ -96,14 +144,54 @@
     </section>
 
     <!-- Horizontal Scrolling: Top Features -->
-    <section class="flex flex-col gap-sm w-full -mx-edge-margin px-edge-margin">
-      <div class="flex justify-between items-end">
-        <h3 class="font-title-md text-title-md text-on-surface">Active Modules</h3>
-        <button class="font-label-caps text-label-caps text-primary hover:opacity-80 transition-opacity uppercase cursor-pointer">View All</button>
+    <section class="flex flex-col gap-sm w-full" aria-label="Active Modules Region">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <h3 class="font-title-md text-title-md text-on-surface">Active Modules</h3>
+          {#if isNonTouch}
+            <span class="scroll-indicator-badge text-xs font-semibold px-2 py-0.5 rounded-full bg-[#006591] text-[#ffffff] border border-[#39b8fd]">
+              Scroll Region
+            </span>
+          {/if}
+        </div>
+        <div class="flex items-center gap-2">
+          {#if isNonTouch}
+            <div class="flex items-center gap-1.5 mr-2" aria-label="Horizontal scroll controls">
+              <button
+                type="button"
+                aria-label="Scroll left in active modules"
+                disabled={!canScrollLeft}
+                on:click={handleScrollLeft}
+                class="scroll-btn p-1.5 rounded-lg bg-[#006591] text-[#ffffff] hover:bg-[#004c6e] disabled:opacity-40 disabled:cursor-not-allowed transition-all border border-[#39b8fd] focus:outline-none focus:ring-2 focus:ring-[#39b8fd] flex items-center justify-center cursor-pointer"
+              >
+                <span class="material-symbols-outlined text-sm">chevron_left</span>
+              </button>
+              <button
+                type="button"
+                aria-label="Scroll right in active modules"
+                disabled={!canScrollRight}
+                on:click={handleScrollRight}
+                class="scroll-btn p-1.5 rounded-lg bg-[#006591] text-[#ffffff] hover:bg-[#004c6e] disabled:opacity-40 disabled:cursor-not-allowed transition-all border border-[#39b8fd] focus:outline-none focus:ring-2 focus:ring-[#39b8fd] flex items-center justify-center cursor-pointer"
+              >
+                <span class="material-symbols-outlined text-sm">chevron_right</span>
+              </button>
+            </div>
+          {/if}
+          <button type="button" class="font-label-caps text-label-caps text-primary hover:opacity-80 transition-opacity uppercase cursor-pointer">View All</button>
+        </div>
       </div>
-      <div class="flex overflow-x-auto hide-scrollbar gap-sm pb-4 snap-x snap-mandatory">
+
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <div
+        bind:this={scrollContainer}
+        on:scroll={updateScrollState}
+        on:keydown={handleKeyDown}
+        role="region"
+        aria-label="Active modules scrollable list"
+        class="flex overflow-x-auto w-full {isNonTouch ? 'custom-h-scrollbar' : 'hide-scrollbar'} gap-sm pb-4 snap-x snap-mandatory focus:outline-none focus:ring-2 focus:ring-[#39b8fd] rounded-lg"
+      >
         <!-- Feature Card 1 -->
-        <div class="snap-start shrink-0 w-[240px] glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-primary/50 transition-colors duration-300">
+        <button type="button" aria-label="Neural Routing Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
           <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
             <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">hub</span>
           </div>
@@ -111,10 +199,10 @@
             <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Neural Routing</h4>
             <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Optimizing data pathways using predictive algorithms.</p>
           </div>
-        </div>
+        </button>
 
         <!-- Feature Card 2 -->
-        <div class="snap-start shrink-0 w-[240px] glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-secondary/50 transition-colors duration-300">
+        <button type="button" aria-label="Quantum Vault Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-secondary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
           <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
             <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">shield_lock</span>
           </div>
@@ -122,10 +210,10 @@
             <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Quantum Vault</h4>
             <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">End-to-end encryption with zero-trust architecture.</p>
           </div>
-        </div>
+        </button>
 
         <!-- Feature Card 3 -->
-        <div class="snap-start shrink-0 w-[240px] glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-primary/50 transition-colors duration-300">
+        <button type="button" aria-label="Deep Analytics Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
           <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
             <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">insights</span>
           </div>
@@ -133,7 +221,40 @@
             <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Deep Analytics</h4>
             <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Real-time pattern recognition and anomaly detection.</p>
           </div>
-        </div>
+        </button>
+
+        <!-- Feature Card 4 -->
+        <button type="button" aria-label="Telemetry Dispatch Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-secondary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
+          <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
+            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">sensors</span>
+          </div>
+          <div>
+            <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Telemetry Dispatch</h4>
+            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">High-frequency background stream processor and validator.</p>
+          </div>
+        </button>
+
+        <!-- Feature Card 5 -->
+        <button type="button" aria-label="Adaptive Compute Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">memory</span>
+          </div>
+          <div>
+            <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Adaptive Compute</h4>
+            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Dynamic workload balancing across edge nodes.</p>
+          </div>
+        </button>
+
+        <!-- Feature Card 6 -->
+        <button type="button" aria-label="Event Pipeline Module" class="snap-start shrink-0 w-[280px] text-left glass-card rounded-xl p-md flex flex-col gap-md relative group cursor-pointer hover:border-secondary/50 focus:outline-none focus:ring-2 focus:ring-[#39b8fd] transition-colors duration-300">
+          <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
+            <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">stream</span>
+          </div>
+          <div>
+            <h4 class="font-body-lg text-body-lg font-bold text-on-surface mb-1">Event Pipeline</h4>
+            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Real-time event streaming and filter matrix.</p>
+          </div>
+        </button>
       </div>
     </section>
 
@@ -264,7 +385,30 @@
     z-index: -1;
   }
 
-  /* Hide scrollbar for horizontal scrolling but keep functionality */
+  /* Custom horizontal scrollbar for non-touch devices */
+  .custom-h-scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-track {
+    background: rgba(224, 227, 229, 0.2);
+    border-radius: 4px;
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #39b8fd;
+    border-radius: 4px;
+    min-width: 40px;
+    border: 1px solid rgba(224, 227, 229, 0.3);
+  }
+  .custom-h-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #006591;
+  }
+
+  .custom-h-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #39b8fd rgba(224, 227, 229, 0.2);
+  }
+
+  /* Hide scrollbar for touch devices */
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
