@@ -1,0 +1,62 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "5b29f5d9-bf2d-47b3-93fc-b701ea2e1929",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Remove -DskipTests from all Dockerfiles to ensure tests are executed during the build.",
+        "R2: Block code review approvals that do not contain genuine reasoning."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch build scripts and review gate",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the build and review patches for this epic, I want to remove test skipping and enforce review validation, so that defective code cannot reach production unchecked.",
+          "acceptanceCriteria": "Given a Dockerfile in the project, When a build is triggered, Then tests must be executed without the -DskipTests flag.\nGiven a PR review is submitted, When the review is processed, Then it is blocked if it lacks genuine critique.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Build and Review Validation Configurations",
+          "sixSigmaMetric": "Decrease the number of bypassed tests and fake reviews in the CI/CD pipeline to 0",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Goal-Question-Metric Telemetry for Quality Control",
+      "jtbd": "When assessing development practices, I want to answer: 1) Are PR reviews containing actual critique? 2) Are tests executing in the CI build? so that I can ensure deliberate quality control bypassing is eliminated.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Increase the visibility of CI/CD pipeline quality gates to 100%",
+      "tocConstraintRef": "Quality Control Gate Visibility",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Track the ratio of PR reviews containing measurable critique versus empty or fake approvals.",
+        "R2: Track the execution of test suites in CI builds to ensure no builds skip tests."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Instrument PR and Build Telemetry",
+          "roleTag": "BARCAN-TAG-09",
+          "jtbd": "When implementing telemetry for this epic, I want to configure GQM metrics for code review and test execution, so that quality control adherence is visible.",
+          "acceptanceCriteria": "Given a PR review is submitted, When the review is processed, Then its critique depth is evaluated and logged.\nGiven a CI build runs, When it completes, Then test execution presence is recorded.\nGiven the metrics are defined, When the task is complete, Then an architecture decision record is committed.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "CI/CD Pipeline Telemetry Architecture",
+          "sixSigmaMetric": "Increase telemetry coverage of PR reviews and CI builds from 0% to 100%",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    }
+  ]
+}
