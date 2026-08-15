@@ -1,0 +1,68 @@
+{
+  "epics": [
+    {
+      "existingEpicId": null,
+      "title": "Epidemiological Data Cataloging and Management",
+      "jtbd": "When an epidemiologist accesses the system, I want to catalog and manage structured epidemiological datasets and surveillance data, so that quantitative outbreak metrics can be stored and analyzed alongside textual materials.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Increase the successful cataloging rate of valid structured datasets from 0% to 100%",
+      "tocConstraintRef": "Structured dataset ingestion and parsing process",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: The system manages, catalogs, and retrieves structured epidemiological datasets.",
+        "R2: The system correctly incorporates these datasets into existing material retrieval flows."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch existing material endpoints to accept structured epidemiological datasets",
+          "roleTag": "BARCAN-TAG-02",
+          "jtbd": "When implementing data cataloging for this epic, I want to patch the existing material endpoints, so that structured datasets can be submitted and retrieved using the established API.",
+          "acceptanceCriteria": "Given an epidemiologist with a structured dataset, When they submit it to the existing material endpoint, Then the system successfully parses and catalogs the dataset.\nGiven a submitted structured dataset, When an epidemiologist queries for materials, Then the structured dataset is returned alongside textual materials.\nGiven an automated build pipeline, When tests are executed against the patched endpoints, Then the data parsing logic is verified with passing integration tests.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Material endpoint parsing logic",
+          "sixSigmaMetric": "100% of structured dataset submissions process correctly without breaking existing textual material flows",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "User Authentication and Session Management",
+      "jtbd": "When a user accesses the knowledge base management functions, I want to authenticate credentials and issue a session token, so that system access and password recovery are tied to authenticated user sessions.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Decrease the number of unauthenticated access events to management functions to 0",
+      "tocConstraintRef": "Authentication and session token verification mechanism",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: The system verifies user credentials and generates an authentication token.",
+        "R2: The system establishes a secure user session for authenticated access."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch existing logic to issue and validate secure session tokens",
+          "roleTag": "BARCAN-TAG-07",
+          "jtbd": "When implementing session management for this epic, I want to patch the existing login logic, so that session tokens are issued and required for management functions.",
+          "acceptanceCriteria": "Given valid user credentials, When a user submits a login request, Then the system verifies the credentials and generates an authentication token.\nGiven an unauthenticated request to a management function, When the system processes the request, Then the system rejects the request due to missing session context.\nGiven a security test suite, When the test suite exercises the patched login logic, Then token validation and session management are verified.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Token generation and verification routine",
+          "sixSigmaMetric": "100% of unauthenticated access attempts are blocked from reaching management functions",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    }
+  ]
+}
