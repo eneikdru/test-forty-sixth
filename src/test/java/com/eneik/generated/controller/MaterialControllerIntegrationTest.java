@@ -1,9 +1,12 @@
 package com.eneik.generated.controller;
 
 import com.eneik.generated.dto.CreateMaterialRequest;
+import com.eneik.generated.dto.LoginRequest;
+import com.eneik.generated.dto.LoginResponse;
 import com.eneik.generated.dto.PublishMaterialRequest;
 import com.eneik.generated.material.Material;
 import com.eneik.generated.material.MaterialRepository;
+import com.eneik.generated.service.SessionAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,9 +40,17 @@ class MaterialControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SessionAuthService sessionAuthService;
+
+    private String authToken;
+
     @BeforeEach
     void setUp() {
         materialRepository.deleteAll();
+        sessionAuthService.clearAllSessions();
+        LoginResponse response = sessionAuthService.authenticate(new LoginRequest("testuser", "Password123")).orElseThrow();
+        authToken = "Bearer " + response.getToken();
     }
 
     @Test
@@ -51,6 +62,7 @@ class MaterialControllerIntegrationTest {
         PublishMaterialRequest request = new PublishMaterialRequest("PUBLISHED", "Approved by Epi Board");
 
         mockMvc.perform(post("/api/v1/materials/" + materialId + "/publish")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -73,6 +85,7 @@ class MaterialControllerIntegrationTest {
         PublishMaterialRequest request = new PublishMaterialRequest("INVALID_STATUS", "Comment");
 
         mockMvc.perform(post("/api/v1/materials/" + materialId + "/publish")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -86,6 +99,7 @@ class MaterialControllerIntegrationTest {
         PublishMaterialRequest request = new PublishMaterialRequest("PUBLISHED", "Note");
 
         mockMvc.perform(post("/api/v1/materials/" + nonExistentId + "/publish")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound())
@@ -97,6 +111,7 @@ class MaterialControllerIntegrationTest {
         CreateMaterialRequest request = new CreateMaterialRequest("", "VIRUS", "", null);
 
         mockMvc.perform(post("/api/v1/materials")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())

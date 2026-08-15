@@ -1,11 +1,14 @@
 package com.eneik.generated.telemetry;
 
 import com.eneik.generated.domain.TelemetryEvent;
+import com.eneik.generated.dto.LoginRequest;
+import com.eneik.generated.dto.LoginResponse;
 import com.eneik.generated.entity.EpidemiologicalMaterial;
 import com.eneik.generated.material.Material;
 import com.eneik.generated.material.MaterialRepository;
 import com.eneik.generated.repository.EpidemiologicalMaterialRepository;
 import com.eneik.generated.repository.TelemetryEventRepository;
+import com.eneik.generated.service.SessionAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,13 +49,21 @@ class TelemetryJourneyE2ETest {
     private MaterialRepository materialRepository;
 
     @Autowired
+    private SessionAuthService sessionAuthService;
+
+    @Autowired
     private ObjectMapper objectMapper;
+
+    private String authToken;
 
     @BeforeEach
     void setUp() {
         telemetryEventRepository.deleteAll();
         epidemiologicalMaterialRepository.deleteAll();
         materialRepository.deleteAll();
+        sessionAuthService.clearAllSessions();
+        LoginResponse response = sessionAuthService.authenticate(new LoginRequest("testuser", "Password123")).orElseThrow();
+        authToken = "Bearer " + response.getToken();
     }
 
     /**
@@ -156,6 +167,7 @@ class TelemetryJourneyE2ETest {
 
         // 2. Publish material 1
         mockMvc.perform(post("/api/v1/materials/" + mat1Id + "/publish")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of(
                                 "status", "PUBLISHED",
@@ -191,6 +203,7 @@ class TelemetryJourneyE2ETest {
 
         // 3. Publish material 2
         mockMvc.perform(post("/api/v1/materials/" + mat2Id + "/publish")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of(
                                 "status", "PUBLISHED",
