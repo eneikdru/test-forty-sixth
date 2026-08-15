@@ -1,0 +1,64 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "5b29f5d9-bf2d-47b3-93fc-b701ea2e1929",
+      "sixSigmaMetric": "Reduce bypassed quality controls to 0 incidents",
+      "tocConstraintRef": "CI/CD Quality Gate",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Prevent test bypassing by removing -DskipTests from Dockerfiles and failing the build if tests are skipped.",
+        "R2: Prevent fake reviews by validating reasoning in PR approvals and blocking merge if reasoning is missing or generic."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Patch Dockerfiles and enforce PR review validation",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing quality control enforcement for this epic, I want to remove test skipping and add review validation, so that deliberate quality control bypassing is prevented.",
+          "acceptanceCriteria": "Given a Docker build, When it executes, Then tests are run and the build fails if -DskipTests is present.\nGiven a PR approval, When it is submitted, Then it is rejected unless it contains substantive reasoning.\nGiven a quality control validation test, When a fake approval or test skip is attempted, Then the CI pipeline explicitly blocks the action, verifying our QA coverage.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "CI/CD Quality Gate",
+          "sixSigmaMetric": "100% test execution and 100% genuine PR approvals",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ],
+          "dod": "All Dockerfiles patched to remove test skips, PR review validation rules enforced, and CI tests pass."
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Goal-Question-Metric Telemetry for Code Integrity",
+      "jtbd": "When assessing the development pipeline, I want to measure test execution rates and review depth, so that I know if our quality control gates are effective.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Defect escape rate due to bypassed CI gates",
+      "tocConstraintRef": "CI/CD Pipeline Observability",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Goal: Ensure quality control gates are effective. Questions: Are tests running consistently? Are reviews substantive? Metrics: Test execution rate per build and average word count of review reasoning."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Instrument GQM telemetry for CI and PR reviews",
+          "roleTag": "BARCAN-TAG-06",
+          "jtbd": "When implementing telemetry for this epic, I want to capture test execution and review depth metrics, so that the GQM questions can be answered.",
+          "acceptanceCriteria": "Given a completed CI build, When metrics are collected, Then the test execution rate is recorded.\nGiven a PR approval, When it is submitted, Then the length of the reasoning is logged.\nGiven a telemetry validation test, When metrics are queried, Then the expected values for the recent build and PR are returned, verifying our QA coverage.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "CI/CD Pipeline Observability",
+          "sixSigmaMetric": "Metric coverage of builds and PRs reaches 100%",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ],
+          "dod": "GQM telemetry instrumented, tests passed, and metrics verified."
+        }
+      ]
+    }
+  ]
+}
