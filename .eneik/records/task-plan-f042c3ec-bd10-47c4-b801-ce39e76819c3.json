@@ -1,0 +1,32 @@
+{
+  "epics": [
+    {
+      "existingEpicId": "5b29f5d9-bf2d-47b3-93fc-b701ea2e1929",
+      "sixSigmaMetric": "reduce the rate of bypassed CI checks and fake approvals from >0% to 0%",
+      "tocConstraintRef": "Automated Quality Verification",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Dockerfiles must not bypass the test suite during the build process",
+        "R2: Automated PR review approvals must be structurally validated to contain substantive critique"
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Enforce test execution and validate review payloads",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the pipeline fixes for this epic, I want to remove test-skipping arguments and add review payload validation, so that the review gate cannot be bypassed.",
+          "acceptanceCriteria": "Given a Dockerfile in the build context,\nWhen the container image is built,\nThen Maven executes the full test suite without the -DskipTests flag.\nGiven an automated review submission,\nWhen the system evaluates the review payload,\nThen it rejects the approval if it lacks genuine reasoning.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Docker and CI workflow configurations",
+          "sixSigmaMetric": "reduce the count of -DskipTests instances in Dockerfiles to 0 and increase review validation coverage to 100%",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1",
+            "R2"
+          ]
+        }
+      ]
+    }
+  ]
+}
