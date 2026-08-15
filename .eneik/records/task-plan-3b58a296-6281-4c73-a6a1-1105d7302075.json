@@ -1,0 +1,142 @@
+{
+  "epics": [
+    {
+      "existingEpicId": null,
+      "title": "Active Modules Usability Improvements",
+      "jtbd": "When I view the active modules on a non-touch device, I want to see explicit scroll indicators, so that I know there is more content available horizontally.",
+      "kanoClass": "Performance",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Increase discoverability of hidden horizontal content by reducing scroll abandonment by 100%",
+      "tocConstraintRef": "Frontend UI Discoverability",
+      "sourceIndex": 0,
+      "requirements": [
+        "R1: Add explicit visual scroll indicators (e.g., arrows or scrollbar) to the horizontal scroll region for active modules on non-touch devices."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Implement explicit scroll indicators for active modules",
+          "roleTag": "BARCAN-TAG-11",
+          "jtbd": "When implementing the scroll indicators for this epic, I want to provide visual cues for horizontal scrolling, so that non-touch users can discover all active modules.",
+          "acceptanceCriteria": "Given a user views the active modules on a non-touch device,\nWhen the content overflows horizontally,\nThen explicit scroll indicators are visible and functional.\nGiven a user navigates with a keyboard to comply with WCAG 2.1 AA,\nWhen they focus the scroll region,\nThen the focus state is clearly visible and they can operate the scroll indicators via keyboard.",
+          "leanValue": "valuable",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Active modules UI component",
+          "sixSigmaMetric": "Zero accessibility violations for keyboard operability on the scroll region",
+          "hasUi": true,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "9cf7131c-5906-4572-920a-e0efc3e250a4",
+      "sixSigmaMetric": "Increase test coverage for authentication components to 100%",
+      "tocConstraintRef": "QA Verification Bottleneck",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Provide automated test coverage (unit and integration tests) for the authentication logic in AuthController and WebConfig."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Add test coverage for authentication logic",
+          "roleTag": "BARCAN-TAG-06",
+          "jtbd": "When implementing the tests for this epic, I want to verify the AuthController and WebConfig, so that the authentication logic is demonstrably correct and prevents regressions.",
+          "acceptanceCriteria": "Given the AuthController and WebConfig are implemented,\nWhen the test suite is executed,\nThen unit tests must verify pure logic and integration tests must verify the API flows for authentication.\nGiven an invalid authentication attempt,\nWhen the endpoint is called,\nThen the tests must assert that access is rejected correctly.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Test coverage and verification pipeline",
+          "sixSigmaMetric": "Increase automated test coverage for AuthController to 100% of public methods",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "7400da12-6696-47aa-b94c-401c374028d3",
+      "sixSigmaMetric": "Increase test coverage for material endpoints and entities to 100%",
+      "tocConstraintRef": "QA Verification Bottleneck",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Add automated tests (unit and integration) for the modified material endpoints and entities."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Add test coverage for material endpoints and entities",
+          "roleTag": "BARCAN-TAG-06",
+          "jtbd": "When implementing the tests for this epic, I want to verify the material endpoints and entities, so that the cataloging functionalities are proven to work correctly.",
+          "acceptanceCriteria": "Given the material endpoints and entities are implemented,\nWhen the test suite is executed,\nThen unit tests must cover the entity logic and integration tests must verify the endpoint API flows.\nGiven an API request to the material endpoints,\nWhen the data is processed,\nThen the tests must assert that the responses match the expected schema.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Material verification pipeline",
+          "sixSigmaMetric": "Achieve 100% passing test rate for material endpoints",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": "42f61f7d-c744-4a54-a818-4503b175e2ca",
+      "sixSigmaMetric": "Ensure 100% of Docker builds execute the automated test suite",
+      "tocConstraintRef": "CI Pipeline Integrity",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Execute the automated test suite during the Docker build process by removing the skip-tests flag."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Enforce test execution in Docker build",
+          "roleTag": "BARCAN-TAG-05",
+          "jtbd": "When implementing the build changes for this epic, I want to execute tests during the Maven build phase, so that failing tests prevent the creation of a broken Docker image.",
+          "acceptanceCriteria": "Given a developer triggers a Docker build,\nWhen the Maven package stage runs,\nThen the tests must be executed without the '-DskipTests' flag.\nGiven the test suite contains failing tests,\nWhen the Docker build runs,\nThen the build must fail and reject the image creation.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Docker build verification",
+          "sixSigmaMetric": "Reduce the number of skipped tests in the build pipeline to zero",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    },
+    {
+      "existingEpicId": null,
+      "title": "Automated Code Review Integrity",
+      "jtbd": "When an automated code review is performed, I want the system to provide genuine critique and reasoning, so that faked approvals do not compromise code quality.",
+      "kanoClass": "Must-Be",
+      "cynefinDomain": "clear",
+      "sixSigmaMetric": "Reduce the occurrence of empty critical reasons in approved review records to zero",
+      "tocConstraintRef": "Automated Review Validation",
+      "sourceIndex": 1,
+      "requirements": [
+        "R1: Update the automated code review orchestration to reject any 'approve' verdict that contains an empty 'criticalReason' or fails to list logical concerns."
+      ],
+      "coverageComplete": true,
+      "slices": [
+        {
+          "title": "Enforce validation for automated review records",
+          "roleTag": "BARCAN-TAG-09",
+          "jtbd": "When implementing the validation for this epic, I want to enforce checks on the review JSON output, so that approvals missing a critical reason are rejected.",
+          "acceptanceCriteria": "Given an automated code review is generated,\nWhen the verdict is 'approve',\nThen a non-empty 'criticalReason' must be provided in the JSON record.\nGiven a review record with an empty critical reason,\nWhen it is submitted,\nThen the validation must fail and reject the faked review.",
+          "leanValue": "essential",
+          "cynefinDomain": "clear",
+          "tocConstraintRef": "Review JSON validation",
+          "sixSigmaMetric": "100% rejection rate for faked review approvals missing critical reasons",
+          "hasUi": false,
+          "requirementRefs": [
+            "R1"
+          ]
+        }
+      ]
+    }
+  ]
+}
