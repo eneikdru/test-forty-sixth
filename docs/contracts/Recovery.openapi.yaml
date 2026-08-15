@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: Recovery API Contract
+  description: Shared API contract for account recovery, password reset request, token validation, and password reset confirmation in Epidemiology Knowledge Base.
+  version: 1.0.0
+paths:
+  /api/v1/auth/recovery/request:
+    post:
+      summary: Request password reset email
+      description: Initiates password recovery process by generating a recovery token and sending instructions to the specified email address.
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '200':
+          description: Recovery request accepted. An email with reset instructions has been sent if the account exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetResponse'
+        '400':
+          description: Invalid email format or malformed request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many password reset requests. Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during recovery request processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/recovery/confirm:
+    post:
+      summary: Confirm password reset
+      description: Resets user password using a valid recovery token and new password.
+      operationId: confirmPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+      responses:
+        '200':
+          description: Password successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetConfirmResponse'
+        '400':
+          description: Invalid token format or password complexity criteria not met.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Recovery token is invalid, expired, or already consumed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during password reset confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/recovery/validate-token:
+    get:
+      summary: Validate recovery token
+      description: Checks whether a password reset token is valid and active before displaying the reset password form.
+      operationId: validateRecoveryToken
+      parameters:
+        - name: token
+          in: query
+          required: true
+          description: Recovery token to validate.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token status checked successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenValidationResponse'
+        '400':
+          description: Missing or malformed token parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Token not found or expired.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    PasswordResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: User account email address to send recovery link to.
+          example: user@example.com
+
+    PasswordResetResponse:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          example: ACCEPTED
+        message:
+          type: string
+          example: If an account exists with this email, password reset instructions have been sent.
+        requestId:
+          type: string
+          format: uuid
+          example: c4f80cf4-1234-5678-90ab-cdef12345678
+        expiresInMinutes:
+          type: integer
+          example: 30
+
+    PasswordResetConfirmRequest:
+      type: object
+      required:
+        - token
+        - newPassword
+      properties:
+        token:
+          type: string
+          description: Recovery token received via email link.
+          example: rcv_tok_a1b2c3d4e5f6
+        newPassword:
+          type: string
+          format: password
+          minLength: 8
+          description: New password meeting security rules (minimum 8 characters).
+          example: P@ssw0rd2026!
+
+    PasswordResetConfirmResponse:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          example: SUCCESS
+        message:
+          type: string
+          example: Password has been successfully reset.
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-08-15T00:15:00Z'
+
+    TokenValidationResponse:
+      type: object
+      required:
+        - valid
+        - message
+      properties:
+        valid:
+          type: boolean
+          example: true
+        maskedEmail:
+          type: string
+          example: u***r@example.com
+        message:
+          type: string
+          example: Token is valid and ready for password reset.
+        expiresAt:
+          type: string
+          format: date-time
+          example: '2026-08-15T00:45:00Z'
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - timestamp
+      properties:
+        code:
+          type: string
+          example: INVALID_TOKEN
+        message:
+          type: string
+          example: Provided recovery token is invalid or has expired.
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T00:15:00Z'
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - Token expired at 2026-08-15T00:10:00Z
