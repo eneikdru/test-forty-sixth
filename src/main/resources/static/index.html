@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+    <title>Epidemiological Material Editor</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-on-surface": "#eef0ff",
+                        "on-secondary-container": "#54647a",
+                        "surface-container-low": "#f2f3ff",
+                        "secondary-container": "#d0e1fb",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface": "#faf8ff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container": "#eaedff",
+                        "secondary": "#505f76",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container-highest": "#dae2fd",
+                        "outline-variant": "#c3c6d7",
+                        "on-background": "#131b2e",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dae2fd",
+                        "inverse-primary": "#b4c5ff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d2d9f4",
+                        "outline": "#737686",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-container-high": "#e2e7ff",
+                        "inverse-surface": "#283044",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#131b2e",
+                        "surface-tint": "#0053db",
+                        "background": "#faf8ff",
+                        "on-surface-variant": "#434655",
+                        "primary": "#004ac6",
+                        "primary-container": "#2563eb",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    fontFamily: {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "caption": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-safe pb-safe selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+<!-- TopAppBar -->
+<header class="bg-surface fixed top-0 w-full z-40 border-b border-outline-variant pt-safe">
+    <div class="flex justify-between items-center px-4 h-16 max-w-7xl mx-auto w-full">
+        <button id="cancel-btn" type="button" class="text-on-surface-variant font-medium text-base hover:bg-secondary-container transition-colors active:scale-95 px-3 py-2 rounded-lg">
+            Cancel
+        </button>
+        <h1 class="text-lg md:text-xl font-bold text-on-surface text-center flex-1 truncate px-2">
+            Material Management Editor
+        </h1>
+        <div class="flex items-center gap-2">
+            <button id="unpublish-btn" type="button" class="hidden bg-error-container text-on-error-container font-bold text-sm hover:bg-red-200 transition-colors px-3 py-2 rounded-lg active:scale-95 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">unpublished</span>
+                <span>Unpublish</span>
+            </button>
+            <button id="publish-btn" type="submit" form="material-form" class="bg-primary text-on-primary font-bold text-sm hover:bg-blue-700 transition-colors active:scale-95 px-4 py-2 rounded-lg flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">send</span>
+                <span>Publish</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content Area -->
+<main class="flex-1 mt-16 mb-16 overflow-y-auto px-4 py-6 max-w-4xl mx-auto w-full">
+
+    <!-- Document Meta / Context Card -->
+    <div class="mb-6 bg-surface-container-low rounded-xl border border-outline-variant p-4 flex items-start gap-4 shadow-sm">
+        <div class="bg-primary-container text-on-primary-container w-12 h-12 rounded-lg border border-outline-variant shrink-0 flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl">science</span>
+        </div>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+                <span id="status-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-300">
+                    DRAFT
+                </span>
+                <span id="material-id-badge" class="text-xs text-on-surface-variant font-mono truncate">
+                    ID: New Material
+                </span>
+            </div>
+            <p class="text-xs text-on-surface-variant uppercase tracking-wider mt-1">Epidemiological Knowledge Base Catalog</p>
+        </div>
+    </div>
+
+    <!-- Server Error Summary Banner -->
+    <div id="server-error-banner" class="hidden mb-6 p-4 rounded-lg bg-error-container border border-error text-on-error-container flex items-start gap-3" role="alert" aria-live="assertive">
+        <span class="material-symbols-outlined text-error text-2xl shrink-0">error</span>
+        <div class="flex-1 text-sm">
+            <h3 class="font-bold text-error mb-1">Validation Error</h3>
+            <p id="server-error-message" class="text-on-error-container font-medium"></p>
+            <ul id="server-error-details" class="list-disc pl-5 mt-2 text-xs space-y-1"></ul>
+        </div>
+    </div>
+
+    <!-- Success Notification Banner -->
+    <div id="success-banner" class="hidden mb-6 p-4 rounded-lg bg-green-100 border border-green-500 text-green-900 flex items-center gap-3" role="status" aria-live="polite">
+        <span class="material-symbols-outlined text-green-700 text-2xl shrink-0">check_circle</span>
+        <div class="flex-1 text-sm font-medium" id="success-message">
+            Material successfully published.
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form id="material-form" class="space-y-6" novalidate>
+
+        <!-- Pathogen Type Select Field -->
+        <div>
+            <label for="pathogenType" class="block text-sm font-bold text-on-surface mb-1">
+                Pathogen Type <span class="text-error">*</span>
+            </label>
+            <select id="pathogenType" name="pathogenType" class="w-full bg-surface border border-outline rounded-lg px-3 py-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-base" aria-describedby="pathogenType-error">
+                <option value="">-- Select Pathogen Classification --</option>
+                <option value="VIRUS">Virus</option>
+                <option value="BACTERIA">Bacteria</option>
+                <option value="PARASITE">Parasite</option>
+                <option value="FUNGI">Fungi</option>
+                <option value="PRION">Prion</option>
+                <option value="OTHER">Other / General</option>
+            </select>
+            <p id="pathogenType-error" class="hidden mt-1.5 text-xs font-bold text-error flex items-center gap-1" role="alert">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                <span id="pathogenType-error-text">Please select a valid pathogen type.</span>
+            </p>
+        </div>
+
+        <!-- Title Input Field -->
+        <div>
+            <label for="title" class="block text-sm font-bold text-on-surface mb-1">
+                Material Title <span class="text-error">*</span>
+            </label>
+            <input id="title" name="title" type="text" placeholder="e.g., Influenza A Outbreak Protocol 2026" class="w-full bg-surface border border-outline rounded-lg px-3 py-2.5 text-on-surface placeholder-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-base" aria-describedby="title-error"/>
+            <p id="title-error" class="hidden mt-1.5 text-xs font-bold text-error flex items-center gap-1" role="alert">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                <span id="title-error-text">Title is required.</span>
+            </p>
+        </div>
+
+        <!-- Content Editor Textarea Field -->
+        <div>
+            <label for="content" class="block text-sm font-bold text-on-surface mb-1">
+                Epidemiological Protocol & Data Content <span class="text-error">*</span>
+            </label>
+            <textarea id="content" name="content" rows="10" placeholder="Enter detailed containment guidelines, surveillance protocols, or research data..." class="w-full bg-surface border border-outline rounded-lg px-3 py-2.5 text-on-surface placeholder-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-base leading-relaxed" aria-describedby="content-error"></textarea>
+            <p id="content-error" class="hidden mt-1.5 text-xs font-bold text-error flex items-center gap-1" role="alert">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                <span id="content-error-text">Material content is required.</span>
+            </p>
+        </div>
+
+        <!-- Metadata Input Field -->
+        <div>
+            <label for="metadata" class="block text-sm font-bold text-on-surface mb-1">
+                Additional Metadata (Optional)
+            </label>
+            <input id="metadata" name="metadata" type="text" placeholder='{"author": "EpiTeam", "version": "1.0"}' class="w-full bg-surface border border-outline rounded-lg px-3 py-2.5 text-on-surface placeholder-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm font-mono"/>
+        </div>
+
+    </form>
+</main>
+
+<!-- Unpublish Confirmation Modal Dialog -->
+<div id="unpublish-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-surface rounded-xl border border-outline-variant max-w-md w-full p-6 shadow-2xl space-y-4 transform transition-all">
+        <div class="flex items-center gap-3 text-error">
+            <span class="material-symbols-outlined text-3xl">warning</span>
+            <h2 id="modal-title" class="text-xl font-bold text-on-surface">Confirm Unpublish</h2>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed">
+            Are you sure you want to unpublish this epidemiological material? It will immediately be withdrawn from active distribution.
+        </p>
+        <div>
+            <label for="unpublish-reason" class="block text-xs font-bold text-on-surface mb-1">Reason for Unpublishing (Optional)</label>
+            <input id="unpublish-reason" type="text" placeholder="e.g., Protocol superseded by updated edition" class="w-full bg-surface border border-outline rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"/>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+            <button id="modal-cancel-btn" type="button" class="px-4 py-2 rounded-lg border border-outline text-on-surface font-medium hover:bg-surface-container transition-colors text-sm">
+                Cancel
+            </button>
+            <button id="modal-confirm-btn" type="button" class="px-4 py-2 rounded-lg bg-error text-on-error font-bold hover:bg-red-700 transition-colors text-sm flex items-center gap-1">
+                <span class="material-symbols-outlined text-[18px]">check</span>
+                <span>Confirm Unpublish</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Navigation / Action Toolbar -->
+<nav class="bg-surface-container fixed bottom-0 w-full z-40 h-14 border-t border-outline-variant">
+    <div class="flex justify-around items-center px-4 h-full max-w-7xl mx-auto">
+        <button type="button" class="text-on-surface-variant hover:text-primary transition-colors p-2 flex items-center gap-1 text-sm font-medium">
+            <span class="material-symbols-outlined">article</span>
+            <span class="hidden sm:inline">Overview</span>
+        </button>
+        <button type="button" class="text-primary font-bold p-2 flex items-center gap-1 text-sm">
+            <span class="material-symbols-outlined">edit</span>
+            <span class="hidden sm:inline">Editor</span>
+        </button>
+        <button type="button" class="text-on-surface-variant hover:text-primary transition-colors p-2 flex items-center gap-1 text-sm font-medium">
+            <span class="material-symbols-outlined">history</span>
+            <span class="hidden sm:inline">History</span>
+        </button>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentMaterialId = null;
+
+        const form = document.getElementById('material-form');
+        const titleInput = document.getElementById('title');
+        const pathogenTypeSelect = document.getElementById('pathogenType');
+        const contentTextarea = document.getElementById('content');
+        const metadataInput = document.getElementById('metadata');
+
+        const titleError = document.getElementById('title-error');
+        const pathogenTypeError = document.getElementById('pathogenType-error');
+        const contentError = document.getElementById('content-error');
+
+        const serverErrorBanner = document.getElementById('server-error-banner');
+        const serverErrorMessage = document.getElementById('server-error-message');
+        const serverErrorDetails = document.getElementById('server-error-details');
+        const successBanner = document.getElementById('success-banner');
+        const successMessage = document.getElementById('success-message');
+
+        const statusBadge = document.getElementById('status-badge');
+        const materialIdBadge = document.getElementById('material-id-badge');
+        const unpublishBtn = document.getElementById('unpublish-btn');
+        const unpublishModal = document.getElementById('unpublish-modal');
+        const modalCancelBtn = document.getElementById('modal-cancel-btn');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+        const unpublishReasonInput = document.getElementById('unpublish-reason');
+
+        function clearErrors() {
+            serverErrorBanner.classList.add('hidden');
+            serverErrorDetails.innerHTML = '';
+            successBanner.classList.add('hidden');
+
+            [titleInput, pathogenTypeSelect, contentTextarea].forEach(el => {
+                el.classList.remove('border-error', 'ring-1', 'ring-error');
+            });
+            titleError.classList.add('hidden');
+            pathogenTypeError.classList.add('hidden');
+            contentError.classList.add('hidden');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const payload = {
+                title: titleInput.value,
+                pathogenType: pathogenTypeSelect.value,
+                content: contentTextarea.value,
+                metadata: metadataInput.value
+            };
+
+            try {
+                const response = await fetch('/api/v1/materials', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentMaterialId = data.id;
+                    statusBadge.textContent = data.status || 'PUBLISHED';
+                    statusBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-300';
+                    materialIdBadge.textContent = `ID: ${data.id}`;
+                    unpublishBtn.classList.remove('hidden');
+
+                    successMessage.textContent = `Material ID ${data.id} published successfully.`;
+                    successBanner.classList.remove('hidden');
+                } else {
+                    const errData = await response.json().catch(() => ({ message: 'Server error occurred' }));
+
+                    // Show error banner
+                    serverErrorMessage.textContent = errData.message || 'Validation failed on server.';
+                    if (errData.details && Array.isArray(errData.details)) {
+                        errData.details.forEach(detail => {
+                            const li = document.createElement('li');
+                            li.textContent = detail;
+                            serverErrorDetails.appendChild(li);
+
+                            if (detail.toLowerCase().includes('title')) {
+                                titleInput.classList.add('border-error', 'ring-1', 'ring-error');
+                                titleError.classList.remove('hidden');
+                            }
+                            if (detail.toLowerCase().includes('pathogen')) {
+                                pathogenTypeSelect.classList.add('border-error', 'ring-1', 'ring-error');
+                                pathogenTypeError.classList.remove('hidden');
+                            }
+                            if (detail.toLowerCase().includes('content')) {
+                                contentTextarea.classList.add('border-error', 'ring-1', 'ring-error');
+                                contentError.classList.remove('hidden');
+                            }
+                        });
+                    }
+                    if (!errData.details || errData.details.length === 0) {
+                        if (!titleInput.value.trim()) {
+                            titleInput.classList.add('border-error', 'ring-1', 'ring-error');
+                            titleError.classList.remove('hidden');
+                        }
+                        if (!pathogenTypeSelect.value) {
+                            pathogenTypeSelect.classList.add('border-error', 'ring-1', 'ring-error');
+                            pathogenTypeError.classList.remove('hidden');
+                        }
+                        if (!contentTextarea.value.trim()) {
+                            contentTextarea.classList.add('border-error', 'ring-1', 'ring-error');
+                            contentError.classList.remove('hidden');
+                        }
+                    }
+                    serverErrorBanner.classList.remove('hidden');
+                    // Note: typed values in titleInput, pathogenTypeSelect, contentTextarea, metadataInput remain untouched!
+                }
+            } catch (err) {
+                serverErrorMessage.textContent = 'Network or server communication error.';
+                serverErrorBanner.classList.remove('hidden');
+            }
+        });
+
+        // Unpublish button triggers modal
+        unpublishBtn.addEventListener('click', () => {
+            unpublishModal.classList.remove('hidden');
+        });
+
+        modalCancelBtn.addEventListener('click', () => {
+            unpublishModal.classList.add('hidden');
+        });
+
+        modalConfirmBtn.addEventListener('click', async () => {
+            if (!currentMaterialId) return;
+
+            try {
+                const response = await fetch(`/api/v1/materials/${currentMaterialId}/unpublish`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        confirmationState: 'CONFIRMED',
+                        reason: unpublishReasonInput.value || 'Unpublished via editor UI'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    statusBadge.textContent = 'UNPUBLISHED';
+                    statusBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-300';
+                    unpublishBtn.classList.add('hidden');
+                    unpublishModal.classList.add('hidden');
+
+                    successMessage.textContent = `Material ID ${data.id} unpublished.`;
+                    successBanner.classList.remove('hidden');
+                } else {
+                    alert('Failed to unpublish material.');
+                }
+            } catch (e) {
+                alert('Network error when attempting to unpublish.');
+            }
+        });
+    });
+</script>
+</body>
+</html>

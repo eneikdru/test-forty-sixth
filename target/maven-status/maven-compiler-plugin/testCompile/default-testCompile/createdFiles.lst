@@ -1,0 +1,9 @@
+com/eneik/generated/RecoveryAuthTest.class
+com/eneik/generated/repository/TelemetryEventRepositoryTest.class
+com/eneik/generated/EpidemiologicalMaterialSearchTest.class
+com/eneik/generated/controller/TelemetryControllerIntegrationTest.class
+com/eneik/generated/material/MaterialRepositoryTest.class
+com/eneik/generated/controller/MaterialControllerTest.class
+com/eneik/generated/TelemetryOpenApiContractTest.class
+com/eneik/generated/MaterialManagementOpenApiContractTest.class
+com/eneik/generated/restore/RestoreVerificationTest.class

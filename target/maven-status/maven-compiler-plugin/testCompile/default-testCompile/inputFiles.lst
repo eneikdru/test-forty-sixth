@@ -1,0 +1,9 @@
+/app/src/test/java/com/eneik/generated/EpidemiologicalMaterialSearchTest.java
+/app/src/test/java/com/eneik/generated/MaterialManagementOpenApiContractTest.java
+/app/src/test/java/com/eneik/generated/RecoveryAuthTest.java
+/app/src/test/java/com/eneik/generated/TelemetryOpenApiContractTest.java
+/app/src/test/java/com/eneik/generated/controller/MaterialControllerTest.java
+/app/src/test/java/com/eneik/generated/controller/TelemetryControllerIntegrationTest.java
+/app/src/test/java/com/eneik/generated/material/MaterialRepositoryTest.java
+/app/src/test/java/com/eneik/generated/repository/TelemetryEventRepositoryTest.java
+/app/src/test/java/com/eneik/generated/restore/RestoreVerificationTest.java
