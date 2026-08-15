@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
+@org.springframework.test.context.ContextConfiguration(classes = com.eneik.generated.Application.class)
 class MaterialRepositoryTest {
 
     @Autowired

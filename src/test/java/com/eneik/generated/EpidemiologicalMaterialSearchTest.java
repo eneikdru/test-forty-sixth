@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = Application.class)
 class EpidemiologicalMaterialSearchTest {
 
     @Autowired
@@ -74,5 +74,22 @@ class EpidemiologicalMaterialSearchTest {
         List<EpidemiologicalMaterial> protocolResults = repository.searchByKeyword("Protocol");
         assertThat(protocolResults).hasSize(1);
         assertThat(protocolResults.get(0).getTitle()).isEqualTo("Influenza Surveillance Protocol 2026");
+    }
+
+    @Test
+    void testPaginatedSearchMaterials() {
+        org.springframework.data.domain.Page<EpidemiologicalMaterial> page0 = repository.searchMaterials(
+                "outbreak", null, org.springframework.data.domain.PageRequest.of(0, 1)
+        );
+        assertThat(page0.getTotalElements()).isEqualTo(2);
+        assertThat(page0.getTotalPages()).isEqualTo(2);
+        assertThat(page0.getContent()).hasSize(1);
+
+        org.springframework.data.domain.Page<EpidemiologicalMaterial> virusPage = repository.searchMaterials(
+                null, "VIRUS", org.springframework.data.domain.PageRequest.of(0, 10)
+        );
+        assertThat(virusPage.getTotalElements()).isEqualTo(2);
+        assertThat(virusPage.getContent()).extracting(EpidemiologicalMaterial::getPathogenType)
+                .containsOnly("VIRUS");
     }
 }
