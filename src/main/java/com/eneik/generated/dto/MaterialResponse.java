@@ -7,6 +7,7 @@ public class MaterialResponse {
     private String id;
     private String title;
     private String pathogenType;
+    private String datasetType;
     private String content;
     private String metadata;
     private String status;
@@ -16,9 +17,14 @@ public class MaterialResponse {
     }
 
     public MaterialResponse(String id, String title, String pathogenType, String content, String metadata, String status, Instant createdAt) {
+        this(id, title, pathogenType, null, content, metadata, status, createdAt);
+    }
+
+    public MaterialResponse(String id, String title, String pathogenType, String datasetType, String content, String metadata, String status, Instant createdAt) {
         this.id = id;
         this.title = title;
         this.pathogenType = pathogenType;
+        this.datasetType = datasetType;
         this.content = content;
         this.metadata = metadata;
         this.status = status;
@@ -47,6 +53,14 @@ public class MaterialResponse {
 
     public void setPathogenType(String pathogenType) {
         this.pathogenType = pathogenType;
+    }
+
+    public String getDatasetType() {
+        return datasetType;
+    }
+
+    public void setDatasetType(String datasetType) {
+        this.datasetType = datasetType;
     }
 
     public String getContent() {

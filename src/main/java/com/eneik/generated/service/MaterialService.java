@@ -32,6 +32,7 @@ public class MaterialService {
                 id,
                 request.getTitle(),
                 request.getPathogenType(),
+                request.getDatasetType(),
                 request.getContent(),
                 request.getMetadata(),
                 "DRAFT"
@@ -94,6 +95,7 @@ public class MaterialService {
                 material.getId().toString(),
                 material.getTitle(),
                 material.getPathogenType(),
+                material.getDatasetType(),
                 material.getContent(),
                 material.getMetadata(),
                 material.getStatus(),
