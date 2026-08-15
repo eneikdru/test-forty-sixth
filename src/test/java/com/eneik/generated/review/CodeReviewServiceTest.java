@@ -1,8 +1,5 @@
-package com.eneik.generated.service;
+package com.eneik.generated.review;
 
-import com.eneik.generated.dto.CodeReviewRequest;
-import com.eneik.generated.dto.CodeReviewResponse;
-import com.eneik.generated.dto.CodeReviewVerdictDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,6 @@
-package com.eneik.generated.controller;
+package com.eneik.generated.review;
 
-import com.eneik.generated.dto.CodeReviewRequest;
-import com.eneik.generated.dto.CodeReviewResponse;
 import com.eneik.generated.dto.ErrorResponse;
-import com.eneik.generated.service.CodeReviewService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

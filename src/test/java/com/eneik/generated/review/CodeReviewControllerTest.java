@@ -1,8 +1,6 @@
-package com.eneik.generated.controller;
+package com.eneik.generated.review;
 
 import com.eneik.generated.Application;
-import com.eneik.generated.dto.CodeReviewRequest;
-import com.eneik.generated.dto.CodeReviewVerdictDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,7 @@ class CodeReviewControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void testProcessReview_Success() throws Exception {
+    void testValidApprovalReview() throws Exception {
         CodeReviewVerdictDto verdict = new CodeReviewVerdictDto(
                 0,
                 "approve",
@@ -50,7 +48,7 @@ class CodeReviewControllerTest {
     }
 
     @Test
-    void testProcessReview_RejectedWhenApprovalCriticalReasonEmpty() throws Exception {
+    void testEmptyApprovalReviewRejected() throws Exception {
         CodeReviewVerdictDto verdict = new CodeReviewVerdictDto(
                 0,
                 "approve",

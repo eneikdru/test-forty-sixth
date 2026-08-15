@@ -1,4 +1,4 @@
-package com.eneik.generated.dto;
+package com.eneik.generated.review;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;

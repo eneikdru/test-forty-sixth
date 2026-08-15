@@ -1,8 +1,6 @@
-package com.eneik.generated.service;
+package com.eneik.generated.review;
 
-import com.eneik.generated.dto.CodeReviewRequest;
-import com.eneik.generated.dto.CodeReviewResponse;
-import com.eneik.generated.dto.CodeReviewVerdictDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -15,6 +13,7 @@ public class CodeReviewService {
 
     private final Clock clock;
 
+    @Autowired
     public CodeReviewService() {
         this(Clock.systemUTC());
     }

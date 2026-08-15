@@ -1,4 +1,4 @@
-package com.eneik.generated.dto;
+package com.eneik.generated.review;
 
 import java.time.Instant;
 import java.util.List;
