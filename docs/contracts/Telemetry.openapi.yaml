@@ -151,6 +151,10 @@ components:
           type: string
           description: Pathogen filter applied during search if any.
           example: VIRUS
+        rootCausePatternId:
+          type: string
+          description: Automatically assigned pattern identifier for uncategorized search review concerns.
+          example: UNCATEGORIZED
 
     SearchTelemetryEvent:
       type: object
