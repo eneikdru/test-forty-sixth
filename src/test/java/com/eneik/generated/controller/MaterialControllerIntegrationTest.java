@@ -4,6 +4,7 @@ import com.eneik.generated.dto.CreateMaterialRequest;
 import com.eneik.generated.dto.LoginRequest;
 import com.eneik.generated.dto.LoginResponse;
 import com.eneik.generated.dto.PublishMaterialRequest;
+import com.eneik.generated.dto.UnpublishMaterialRequest;
 import com.eneik.generated.material.Material;
 import com.eneik.generated.material.MaterialRepository;
 import com.eneik.generated.service.SessionAuthService;
@@ -177,5 +178,83 @@ class MaterialControllerIntegrationTest {
                         "Cholera Surveillance Dataset 2026"
                 )))
                 .andExpect(jsonPath("$[*].datasetType", hasItem("EPIDEMIOLOGICAL_DATASET")));
+    }
+
+    @Test
+    void testUnpublishMaterial_Success() throws Exception {
+        UUID materialId = UUID.randomUUID();
+        Material material = new Material(materialId, "Zika Virus Study", "VIRUS", "Content on Zika...", "{}", "PUBLISHED");
+        materialRepository.save(material);
+
+        UnpublishMaterialRequest request = new UnpublishMaterialRequest("CONFIRMED", "Superseded by 2026 study");
+
+        mockMvc.perform(post("/api/v1/materials/" + materialId + "/unpublish")
+                        .header("Authorization", authToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(materialId.toString()))
+                .andExpect(jsonPath("$.title").value("Zika Virus Study"))
+                .andExpect(jsonPath("$.status").value("UNPUBLISHED"));
+
+        Material updated = materialRepository.findById(materialId).orElseThrow();
+        assertThat(updated.getStatus()).isEqualTo("UNPUBLISHED");
+    }
+
+    @Test
+    void testUnpublishMaterial_InvalidConfirmationState_Returns400() throws Exception {
+        UUID materialId = UUID.randomUUID();
+        Material material = new Material(materialId, "Malaria Field Manual", "PARASITE", "Manual details", "{}", "PUBLISHED");
+        materialRepository.save(material);
+
+        UnpublishMaterialRequest request = new UnpublishMaterialRequest("UNCONFIRMED", "Reason");
+
+        mockMvc.perform(post("/api/v1/materials/" + materialId + "/unpublish")
+                        .header("Authorization", authToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_PAYLOAD"))
+                .andExpect(jsonPath("$.details", hasItem(containsString("confirmationState"))));
+    }
+
+    @Test
+    void testUnpublishMaterial_NotPublishedState_Returns400() throws Exception {
+        UUID materialId = UUID.randomUUID();
+        Material material = new Material(materialId, "Draft Anthrax Protocol", "BACTERIA", "Draft details", "{}", "DRAFT");
+        materialRepository.save(material);
+
+        UnpublishMaterialRequest request = new UnpublishMaterialRequest("CONFIRMED", "Retracting draft");
+
+        mockMvc.perform(post("/api/v1/materials/" + materialId + "/unpublish")
+                        .header("Authorization", authToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("STATE_TRANSITION_FAILED"));
+    }
+
+    @Test
+    void testGetMaterialById_Success() throws Exception {
+        UUID materialId = UUID.randomUUID();
+        Material material = new Material(materialId, "Rabies Outbreak Map", "VIRUS", "Map dataset", "{}", "PUBLISHED");
+        materialRepository.save(material);
+
+        mockMvc.perform(get("/api/v1/materials/" + materialId)
+                        .header("Authorization", authToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(materialId.toString()))
+                .andExpect(jsonPath("$.title").value("Rabies Outbreak Map"))
+                .andExpect(jsonPath("$.pathogenType").value("VIRUS"));
+    }
+
+    @Test
+    void testGetMaterialById_NotFound() throws Exception {
+        UUID nonExistentId = UUID.randomUUID();
+
+        mockMvc.perform(get("/api/v1/materials/" + nonExistentId)
+                        .header("Authorization", authToken))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("MATERIAL_NOT_FOUND"));
     }
 }
