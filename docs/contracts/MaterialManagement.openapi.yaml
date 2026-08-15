@@ -1,0 +1,228 @@
+openapi: 3.0.3
+info:
+  title: Material Management API Contract
+  description: Shared API contract for creating, fetching, searching, and unpublishing epidemiological materials.
+  version: 1.0.0
+paths:
+  /api/v1/materials:
+    post:
+      summary: Create epidemiological material
+      description: Creates a new epidemiological material with required title, pathogenType, and content fields.
+      operationId: createMaterial
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMaterialRequest'
+      responses:
+        '201':
+          description: Material successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialResponse'
+        '400':
+          description: Invalid request payload or missing required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: List epidemiological materials
+      description: Retrieves a paginated list of materials.
+      operationId: listMaterials
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of materials.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaterialResponse'
+
+  /api/v1/materials/{id}:
+    get:
+      summary: Get epidemiological material by ID
+      description: Fetches material details by unique identifier.
+      operationId: getMaterialById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Material details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialResponse'
+        '404':
+          description: Material not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/materials/{id}/unpublish:
+    post:
+      summary: Unpublish epidemiological material
+      description: Unpublishes an existing material. Requires explicit confirmation state.
+      operationId: unpublishMaterial
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnpublishMaterialRequest'
+      responses:
+        '200':
+          description: Material successfully unpublished.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialResponse'
+        '400':
+          description: Invalid unpublish request or missing required confirmation state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Material not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CreateMaterialRequest:
+      type: object
+      required:
+        - title
+        - pathogenType
+        - content
+      properties:
+        title:
+          type: string
+          description: Title of the epidemiological material.
+          example: Influenza A Outbreak Protocol 2026
+        pathogenType:
+          type: string
+          description: Type or classification of pathogen.
+          example: VIRUS
+        content:
+          type: string
+          description: Detailed material text, clinical guidelines, or research data.
+          example: Detailed containment and monitoring protocols for Influenza A...
+        metadata:
+          type: string
+          description: Optional additional metadata in JSON or plain text format.
+          example: '{"author": "EpiTeam", "tags": ["influenza", "outbreak"]}'
+
+    UnpublishMaterialRequest:
+      type: object
+      required:
+        - confirmationState
+      properties:
+        confirmationState:
+          type: string
+          enum:
+            - CONFIRMED
+            - PENDING
+            - CANCELLED
+          description: Required confirmation state to execute unpublish transition.
+          example: CONFIRMED
+        reason:
+          type: string
+          description: Optional reason for unpublishing the material.
+          example: Outdated protocol superseded by version 2.0
+
+    MaterialResponse:
+      type: object
+      required:
+        - id
+        - title
+        - pathogenType
+        - content
+        - status
+      properties:
+        id:
+          type: string
+          example: 1
+        title:
+          type: string
+          example: Influenza A Outbreak Protocol 2026
+        pathogenType:
+          type: string
+          example: VIRUS
+        content:
+          type: string
+          example: Detailed containment and monitoring protocols for Influenza A...
+        metadata:
+          type: string
+          example: '{"author": "EpiTeam"}'
+        status:
+          type: string
+          enum:
+            - PUBLISHED
+            - UNPUBLISHED
+            - DRAFT
+          example: PUBLISHED
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-08-15T02:00:00Z'
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - timestamp
+      properties:
+        code:
+          type: string
+          example: INVALID_CONFIRMATION_STATE
+        message:
+          type: string
+          example: Confirmation state MUST be set to CONFIRMED to unpublish material.
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-08-15T02:30:00Z'
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - Field confirmationState is required
