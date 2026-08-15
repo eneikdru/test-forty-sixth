@@ -1,0 +1,12 @@
+{
+  "testsRun": 9,
+  "testsPassed": 9,
+  "testsFailed": 0,
+  "acceptanceCriteriaVerified": [
+    "Given a test environment, When the restore script is executed with the latest backup, Then the system comes up with all data intact.",
+    "Given a successful test restore, When completed, Then the RTO is measured and logged."
+  ],
+  "coverageDeltaPercent": null,
+  "verdict": "pass",
+  "notes": "Verified restore.sh procedure with automated tests in RestoreVerificationTest. Logged RTO and verified data integrity."
+}
