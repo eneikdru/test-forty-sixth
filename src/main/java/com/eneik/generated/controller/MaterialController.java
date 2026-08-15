@@ -42,7 +42,7 @@ public class MaterialController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}}")
     public ResponseEntity<MaterialResponse> getMaterialById(@PathVariable UUID id) {
         MaterialResponse response = materialService.getMaterialById(id);
         return ResponseEntity.ok(response);
