@@ -10,6 +10,7 @@ WORKDIR /build
 COPY pom.xml .
 COPY src ./src
 COPY --from=frontend-build /build/frontend/dist ./src/main/resources/static
+# Execute full Maven build including unit and integration tests (no -DskipTests) to enforce test integrity
 RUN mvn clean package
 
 FROM eclipse-temurin:21-jre-alpine
