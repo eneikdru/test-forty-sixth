@@ -1,0 +1,15 @@
+{
+  "verdicts": [
+    {
+      "sourceIndex": 0,
+      "verdict": "approve",
+      "criticalReason": "",
+      "concerns": [
+        {
+          "text": "The JPQL searchMaterials query uses CONCAT('%', :keyword, '%') directly in JPQL without escaping SQL LIKE wildcard characters (% or _).",
+          "severity": "low"
+        }
+      ]
+    }
+  ]
+}
