@@ -1,0 +1,18 @@
+{
+  "gaps": [
+    {
+      "title": "Epidemiological Data Cataloging and Management",
+      "roleTag": "BARCAN-TAG-02",
+      "jtbd": "When an epidemiologist accesses the system, I want to catalog and manage structured epidemiological datasets and surveillance data, so that quantitative outbreak metrics can be stored and analyzed alongside textual materials.",
+      "acceptanceCriteria": "Given an epidemiologist, When they submit or query epidemiological data records via the system, Then the system manages, catalogs, and retrieves structured epidemiological datasets.",
+      "reason": "literal brief requirement: brief explicitly requires managing epidemiological data ('управления эпидемиологическими данными'), but existing code only implements document/material endpoints."
+    },
+    {
+      "title": "User Authentication and Session Management",
+      "roleTag": "BARCAN-TAG-02",
+      "jtbd": "When a user accesses the knowledge base management functions, I want to authenticate credentials and issue a session token, so that system access and password recovery are tied to authenticated user sessions.",
+      "acceptanceCriteria": "Given user credentials, When a user submits a login request, Then the system verifies credentials, generates an authentication token, and establishes a secure user session.",
+      "reason": "domain-standard expectation: password recovery features exist without underlying user login, authentication, or session management required for an authenticated management system."
+    }
+  ]
+}
