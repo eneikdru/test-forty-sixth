@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/code-reviews")
-public class CodeReviewController {
+public class GeneratedCodeReviewController {
 
     private final CodeReviewService codeReviewService;
 
-    public CodeReviewController(CodeReviewService codeReviewService) {
+    public GeneratedCodeReviewController(CodeReviewService codeReviewService) {
         this.codeReviewService = codeReviewService;
     }
 
