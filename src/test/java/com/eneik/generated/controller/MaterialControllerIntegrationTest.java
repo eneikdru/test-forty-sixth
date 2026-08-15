@@ -131,6 +131,7 @@ class MaterialControllerIntegrationTest {
         );
 
         mockMvc.perform(post("/api/v1/materials")
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
